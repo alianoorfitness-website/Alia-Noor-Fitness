@@ -24,7 +24,7 @@ export function CredentialStrip({ items }: CredentialStripProps) {
       <Reveal className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-8 gap-y-4 px-6 py-8 sm:px-8 sm:py-10">
         {items.map((item, index) => (
           <span key={item.id} className="flex items-center gap-8">
-            <span className="text-xs font-medium uppercase tracking-[0.16em] text-ink-muted sm:text-sm">
+            <span className="break-words text-xs font-medium uppercase tracking-[0.16em] text-ink-muted sm:text-sm">
               {item.label}
             </span>
             {index < items.length - 1 ? (

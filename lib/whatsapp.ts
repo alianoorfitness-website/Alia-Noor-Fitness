@@ -26,7 +26,17 @@ export function buildWhatsAppUrl(phoneNumber: string, message?: string): string 
 
 /**
  * Pre-fills a message for a visitor enquiring about a specific coaching plan.
+ * `planName` always comes from the actual Sanity coachingPlan document —
+ * never hardcode a plan name at the call site.
  */
 export function buildCoachingPlanMessage(planName: string): string {
   return `Hi Alia! I'm interested in your ${planName}. I'd like to know more about how I can get started.`;
+}
+
+/**
+ * Pre-fills a general consultation message, used by the primary hero CTA
+ * to start a conversation before a visitor has picked a specific plan.
+ */
+export function buildConsultationMessage(): string {
+  return "Hi Alia, I'd like to discuss my fitness goals and learn more about your coaching.";
 }

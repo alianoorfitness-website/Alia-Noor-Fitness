@@ -31,11 +31,11 @@ export function ExpertiseList({ groups }: ExpertiseListProps) {
               aria-controls={`expertise-panel-${index}`}
               className="flex w-full items-center justify-between gap-6 py-6 text-left transition-colors hover:text-accent-strong sm:py-8"
             >
-              <span className="flex items-baseline gap-4 sm:gap-6">
+              <span className="flex min-w-0 flex-1 items-baseline gap-4 sm:gap-6">
                 <span className="font-display text-xl text-ink-faint sm:text-2xl">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <span className="font-display text-2xl leading-tight text-ink sm:text-3xl">
+                <span className="break-words font-display text-2xl leading-tight text-ink sm:text-3xl">
                   {group.category}
                 </span>
               </span>

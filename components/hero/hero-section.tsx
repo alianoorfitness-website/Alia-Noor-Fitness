@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
-import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import { buildConsultationMessage, buildWhatsAppUrl } from "@/lib/whatsapp";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -20,7 +20,8 @@ export interface HeroSectionProps {
   subheadline: string;
   primaryCtaLabel: string;
   secondaryCtaLabel: string;
-  heroImageUrl: string;
+  /** Undefined until a hero image is uploaded in Sanity — the portrait is omitted, not broken, when absent. */
+  heroImageUrl?: string;
   heroImageAlt: string;
   coachName: string;
   profession: string;
@@ -47,10 +48,7 @@ export function HeroSection({
   whatsappNumber,
   yearsExperience,
 }: HeroSectionProps) {
-  const whatsappUrl = buildWhatsAppUrl(
-    whatsappNumber,
-    `Hi Alia! I'd like to start my transformation.`
-  );
+  const whatsappUrl = buildWhatsAppUrl(whatsappNumber, buildConsultationMessage());
 
   return (
     <section
@@ -72,16 +70,22 @@ export function HeroSection({
         }}
       />
 
-      <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8">
+      <div
+        className={`mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 sm:px-8 lg:gap-8 ${
+          heroImageUrl ? "lg:grid-cols-[1.05fr_0.95fr]" : "max-w-4xl"
+        }`}
+      >
         <div className="order-2 flex flex-col gap-7 lg:order-1">
           <motion.span
             custom={0}
             initial="hidden"
             animate="visible"
             variants={fadeUp}
-            className="inline-flex w-fit items-center gap-2 rounded-full border border-surface-border bg-canvas-raised px-4 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-ink-muted"
+            className="inline-flex max-w-full flex-wrap items-center gap-2 rounded-full border border-surface-border bg-canvas-raised px-4 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-ink-muted"
           >
-            {profession} &middot; {location}
+            <span className="break-words">
+              {profession} &middot; {location}
+            </span>
           </motion.span>
 
           <motion.h1
@@ -89,7 +93,7 @@ export function HeroSection({
             initial="hidden"
             animate="visible"
             variants={fadeUp}
-            className="text-balance font-display text-5xl leading-[1.04] text-ink sm:text-6xl md:text-7xl"
+            className="text-balance break-words font-display text-5xl leading-[1.04] text-ink sm:text-6xl md:text-7xl"
           >
             {headline}
           </motion.h1>
@@ -114,52 +118,56 @@ export function HeroSection({
             <Button href={whatsappUrl} external>
               {primaryCtaLabel}
             </Button>
-            <Button href="#expertise" variant="secondary">
+            <Button href="#coaching" variant="secondary">
               {secondaryCtaLabel}
             </Button>
           </motion.div>
 
-          <motion.div
-            custom={4}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
-            className="flex items-center gap-3 pt-2"
-          >
-            <span className="font-display text-3xl text-ink">{yearsExperience}+</span>
-            <span className="text-sm leading-tight text-ink-muted">
-              Years of coaching
-              <br />
-              experience
-            </span>
-          </motion.div>
+          {yearsExperience > 0 ? (
+            <motion.div
+              custom={4}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              className="flex items-center gap-3 pt-2"
+            >
+              <span className="font-display text-3xl text-ink">{yearsExperience}+</span>
+              <span className="text-sm leading-tight text-ink-muted">
+                Years of coaching
+                <br />
+                experience
+              </span>
+            </motion.div>
+          ) : null}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="order-1 lg:order-2"
-        >
-          <div className="relative mx-auto aspect-[3/4] w-full max-w-sm overflow-hidden rounded-[2rem] bg-surface sm:max-w-md lg:max-w-none">
-            <Image
-              src={heroImageUrl}
-              alt={heroImageAlt}
-              fill
-              priority
-              sizes="(min-width: 1024px) 40vw, (min-width: 640px) 60vw, 90vw"
-              className="object-cover"
-            />
-            <div className="glass-panel absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl px-4 py-3 sm:bottom-6 sm:left-6 sm:right-6">
-              <div>
-                <p className="font-display text-lg text-ink">{coachName}</p>
-                <p className="text-xs uppercase tracking-[0.14em] text-ink-muted">
-                  {profession}
-                </p>
+        {heroImageUrl ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            className="order-1 lg:order-2"
+          >
+            <div className="relative mx-auto aspect-[3/4] w-full max-w-sm overflow-hidden rounded-[2rem] bg-surface sm:max-w-md lg:max-w-none">
+              <Image
+                src={heroImageUrl}
+                alt={heroImageAlt}
+                fill
+                priority
+                sizes="(min-width: 1024px) 40vw, (min-width: 640px) 60vw, 90vw"
+                className="object-cover"
+              />
+              <div className="glass-panel absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl px-4 py-3 sm:bottom-6 sm:left-6 sm:right-6">
+                <div className="min-w-0">
+                  <p className="truncate font-display text-lg text-ink">{coachName}</p>
+                  <p className="truncate text-xs uppercase tracking-[0.14em] text-ink-muted">
+                    {profession}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        ) : null}
       </div>
     </section>
   );

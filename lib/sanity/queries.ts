@@ -71,7 +71,7 @@ export const getCoachProfile = cache(
           description,
           order,
           featured
-        }
+        } | order(order asc)
       }
     `;
     return client.fetch<CoachProfileResult | null>(query);

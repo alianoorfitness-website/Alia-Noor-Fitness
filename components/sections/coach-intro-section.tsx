@@ -13,7 +13,8 @@ export interface CoachIntroCredential {
 export interface CoachIntroSectionProps {
   introduction: PortableTextContent;
   coachingPhilosophy?: PortableTextContent | null;
-  profileImageUrl: string;
+  /** Undefined until a profile image is uploaded in Sanity. */
+  profileImageUrl?: string;
   profileImageAlt: string;
   credentials: CoachIntroCredential[];
   associationLabel?: string | null;
@@ -36,26 +37,32 @@ export function CoachIntroSection({
 }: CoachIntroSectionProps) {
   return (
     <section id="about" className="py-24 sm:py-32">
-      <div className="mx-auto grid max-w-6xl grid-cols-1 items-start gap-14 px-6 sm:px-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-        <Reveal className="relative">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-surface">
-            <Image
-              src={profileImageUrl}
-              alt={profileImageAlt}
-              fill
-              sizes="(min-width: 1024px) 40vw, 90vw"
-              className="object-cover"
-            />
-          </div>
-          {associationExperience && associationLabel ? (
-            <div className="glass-panel absolute -bottom-6 right-4 flex flex-col gap-0.5 rounded-2xl px-5 py-4 sm:-right-8">
-              <span className="font-display text-2xl text-ink">{associationExperience}</span>
-              <span className="max-w-[10rem] text-xs leading-tight text-ink-muted">
-                {associationLabel}
-              </span>
+      <div
+        className={`mx-auto grid max-w-6xl grid-cols-1 items-start gap-14 px-6 sm:px-8 lg:gap-16 ${
+          profileImageUrl ? "lg:grid-cols-[0.85fr_1.15fr]" : ""
+        }`}
+      >
+        {profileImageUrl ? (
+          <Reveal className="relative">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-surface">
+              <Image
+                src={profileImageUrl}
+                alt={profileImageAlt}
+                fill
+                sizes="(min-width: 1024px) 40vw, 90vw"
+                className="object-cover"
+              />
             </div>
-          ) : null}
-        </Reveal>
+            {associationExperience && associationLabel ? (
+              <div className="glass-panel absolute -bottom-6 right-4 flex max-w-[calc(100%-2rem)] flex-col gap-0.5 rounded-2xl px-5 py-4 sm:-right-8 sm:max-w-[10rem]">
+                <span className="font-display text-2xl text-ink">{associationExperience}</span>
+                <span className="text-xs leading-tight text-ink-muted">
+                  {associationLabel}
+                </span>
+              </div>
+            ) : null}
+          </Reveal>
+        ) : null}
 
         <div className="flex flex-col gap-8">
           <Reveal>
@@ -94,7 +101,7 @@ export function CoachIntroSection({
                     className="flex items-start gap-3 rounded-xl border border-surface-border bg-canvas-raised px-4 py-3"
                   >
                     <span aria-hidden="true" className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                    <span className="text-sm leading-snug text-ink">{credential.title}</span>
+                    <span className="min-w-0 break-words text-sm leading-snug text-ink">{credential.title}</span>
                   </div>
                 ))}
               </div>

@@ -30,7 +30,10 @@ export function WhatsAppFloatButton({ whatsappNumber }: WhatsAppFloatButtonProps
       transition={{ delay: 0.6, duration: 0.5 }}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.96 }}
-      className="glass-panel fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full text-accent-strong shadow-[0_10px_30px_-10px_rgba(28,26,25,0.35)] sm:bottom-6 sm:right-6"
+      className="glass-panel fixed right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full text-accent-strong shadow-[0_10px_30px_-10px_rgba(28,26,25,0.35)] sm:right-6"
+      style={{
+        bottom: "max(1.25rem, env(safe-area-inset-bottom))",
+      }}
     >
       <WhatsAppIcon />
       <span className="sr-only">Chat with Alia on WhatsApp</span>

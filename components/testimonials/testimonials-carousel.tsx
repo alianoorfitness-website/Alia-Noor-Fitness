@@ -35,7 +35,7 @@ export function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps
             exit={{ opacity: 0, x: -24 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
-            <blockquote className="font-display text-balance text-2xl leading-snug text-ink sm:text-3xl">
+            <blockquote className="text-balance break-words font-display text-2xl leading-snug text-ink sm:text-3xl">
               &ldquo;{current.quote}&rdquo;
             </blockquote>
             <figcaption className="mt-6 flex items-center gap-4">
@@ -43,16 +43,16 @@ export function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps
                 <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-surface">
                   <Image
                     src={current.portrait}
-                    alt=""
+                    alt={`Portrait of ${current.clientName}`}
                     fill
                     sizes="48px"
                     className="object-cover"
                   />
                 </div>
               ) : null}
-              <div>
-                <p className="text-sm font-medium text-ink">{current.clientName}</p>
-                <p className="text-xs text-ink-muted">
+              <div className="min-w-0">
+                <p className="break-words text-sm font-medium text-ink">{current.clientName}</p>
+                <p className="break-words text-xs text-ink-muted">
                   {current.category}
                   {current.result ? ` · ${current.result}` : ""}
                 </p>
@@ -62,38 +62,40 @@ export function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps
         </AnimatePresence>
       </div>
 
-      <div className="flex items-center gap-3">
-        {testimonials.map((testimonial, i) => (
-          <button
-            key={testimonial.id}
-            type="button"
-            onClick={() => setIndex(i)}
-            aria-label={`Show testimonial from ${testimonial.clientName}`}
-            aria-current={i === index}
-            className={`h-1.5 rounded-full transition-all ${
-              i === index ? "w-8 bg-accent" : "w-4 bg-surface-border"
-            }`}
-          />
-        ))}
-        <div className="ml-auto flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => go(-1)}
-            aria-label="Previous testimonial"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-surface-border text-ink transition-colors hover:border-ink"
-          >
-            &larr;
-          </button>
-          <button
-            type="button"
-            onClick={() => go(1)}
-            aria-label="Next testimonial"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-surface-border text-ink transition-colors hover:border-ink"
-          >
-            &rarr;
-          </button>
+      {testimonials.length > 1 ? (
+        <div className="flex items-center gap-3">
+          {testimonials.map((testimonial, i) => (
+            <button
+              key={testimonial.id}
+              type="button"
+              onClick={() => setIndex(i)}
+              aria-label={`Show testimonial from ${testimonial.clientName}`}
+              aria-current={i === index}
+              className={`h-1.5 rounded-full transition-all ${
+                i === index ? "w-8 bg-accent" : "w-4 bg-surface-border"
+              }`}
+            />
+          ))}
+          <div className="ml-auto flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => go(-1)}
+              aria-label="Previous testimonial"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-surface-border text-ink transition-colors hover:border-ink"
+            >
+              &larr;
+            </button>
+            <button
+              type="button"
+              onClick={() => go(1)}
+              aria-label="Next testimonial"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-surface-border text-ink transition-colors hover:border-ink"
+            >
+              &rarr;
+            </button>
+          </div>
         </div>
-      </div>
+      ) : null}
     </div>
   );
 }

@@ -29,7 +29,13 @@ export function TransformationsSection({ transformations }: TransformationsSecti
           />
         </Reveal>
 
-        <div className="mt-14 grid grid-cols-1 gap-14 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
+        <div
+          className={`mt-14 grid grid-cols-1 gap-14 lg:gap-10 ${
+            transformations.length === 1
+              ? "mx-auto max-w-sm"
+              : "sm:grid-cols-2 lg:grid-cols-3"
+          }`}
+        >
           {transformations.map((transformation, index) => (
             <Reveal key={transformation.id} delay={index * 0.08}>
               <TransformationCard transformation={transformation} />

@@ -20,10 +20,12 @@ export function SiteFooter({
   profession,
 }: SiteFooterProps) {
   const year = new Date().getFullYear();
-  const whatsappUrl = buildWhatsAppUrl(
-    whatsappNumber,
-    `Hi Alia! I found your website and I'd like to know more about coaching.`
-  );
+  const whatsappUrl = whatsappNumber
+    ? buildWhatsAppUrl(
+        whatsappNumber,
+        `Hi Alia! I found your website and I'd like to know more about coaching.`
+      )
+    : null;
 
   return (
     <footer id="contact" className="border-t border-surface-border bg-surface">
@@ -54,15 +56,19 @@ export function SiteFooter({
             <Button href="#coaching" variant="secondary" className="w-full sm:w-auto">
               Start Coaching
             </Button>
-            <Button href={whatsappUrl} external variant="ghost" className="w-full sm:w-auto">
-              WhatsApp Alia
-            </Button>
-            <a
-              href={`mailto:${email}`}
-              className="text-sm text-ink-muted transition-colors hover:text-ink"
-            >
-              {email}
-            </a>
+            {whatsappUrl ? (
+              <Button href={whatsappUrl} external variant="ghost" className="w-full sm:w-auto">
+                WhatsApp Alia
+              </Button>
+            ) : null}
+            {email ? (
+              <a
+                href={`mailto:${email}`}
+                className="text-sm text-ink-muted transition-colors hover:text-ink"
+              >
+                {email}
+              </a>
+            ) : null}
           </div>
         </div>
 

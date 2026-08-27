@@ -60,7 +60,7 @@ export default async function Home() {
 
   return (
     <>
-      {siteSettings && heroImageUrl ? (
+      {siteSettings ? (
         <HeroSection
           headline={siteSettings.heroHeadline}
           subheadline={siteSettings.heroSubheadline}
@@ -78,7 +78,7 @@ export default async function Home() {
 
       <CredentialStrip items={credentialItems} />
 
-      {coachProfile && coachProfileImageUrl ? (
+      {coachProfile ? (
         <CoachIntroSection
           introduction={coachProfile.introduction}
           coachingPhilosophy={coachProfile.coachingPhilosophy}

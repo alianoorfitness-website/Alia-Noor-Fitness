@@ -30,7 +30,7 @@ export function CoachingPlanCard({ plan, whatsappNumber }: CoachingPlanCardProps
             Most Popular
           </span>
         ) : null}
-        <h3 className="font-display text-2xl">{plan.name}</h3>
+        <h3 className="break-words font-display text-2xl">{plan.name}</h3>
         <p
           className={`mt-2 text-sm ${plan.featured ? "text-canvas/70" : "text-ink-muted"}`}
         >
