@@ -73,6 +73,7 @@ export interface ExpertiseResult {
   category: string;
   iconKey?: string | null;
   order: number;
+  featured?: boolean | null;
 }
 
 export interface MetricResult {
@@ -123,4 +124,12 @@ export interface ProcessStepResult {
   title: string;
   description: string;
   order: number;
+}
+
+export interface FaqResult {
+  _id: string;
+  question: string;
+  answer: string;
+  category?: string | null;
+  order?: number | null;
 }

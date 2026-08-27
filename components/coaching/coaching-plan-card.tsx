@@ -18,18 +18,18 @@ export function CoachingPlanCard({ plan, whatsappNumber }: CoachingPlanCardProps
 
   return (
     <div
-      className={`flex h-full flex-col gap-6 rounded-[1.75rem] p-8 ${
+      className={`relative flex h-full flex-col gap-6 rounded-[1.75rem] p-8 ${
         plan.featured
-          ? "bg-ink text-canvas shadow-[0_30px_60px_-30px_rgba(28,26,25,0.5)]"
+          ? "bg-ink text-canvas shadow-[0_35px_70px_-30px_rgba(28,26,25,0.55)] sm:scale-[1.02]"
           : "border border-surface-border bg-canvas-raised text-ink"
       }`}
     >
-      <div>
-        {plan.featured ? (
-          <span className="mb-3 inline-flex items-center rounded-full bg-accent px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-canvas">
-            Most Popular
-          </span>
-        ) : null}
+      {plan.featured ? (
+        <span className="absolute -top-3 left-8 inline-flex items-center rounded-full bg-accent px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-canvas shadow-[0_8px_16px_-6px_rgba(168,80,59,0.6)]">
+          {plan.badge || "Most Popular"}
+        </span>
+      ) : null}
+      <div className="pt-1">
         <h3 className="break-words font-display text-2xl">{plan.name}</h3>
         <p
           className={`mt-2 text-sm ${plan.featured ? "text-canvas/70" : "text-ink-muted"}`}
@@ -49,13 +49,12 @@ export function CoachingPlanCard({ plan, whatsappNumber }: CoachingPlanCardProps
       <ul className="flex flex-1 flex-col gap-3">
         {plan.features.map((feature) => (
           <li key={feature} className="flex items-start gap-3 text-sm">
-            <span
-              aria-hidden="true"
-              className={`mt-1 h-1.5 w-1.5 shrink-0 rounded-full ${
-                plan.featured ? "bg-highlight" : "bg-accent"
+            <CheckIcon
+              className={`mt-0.5 h-4 w-4 shrink-0 ${
+                plan.featured ? "text-highlight" : "text-accent"
               }`}
             />
-            <span>{feature}</span>
+            <span className="break-words">{feature}</span>
           </li>
         ))}
       </ul>
@@ -70,5 +69,24 @@ export function CoachingPlanCard({ plan, whatsappNumber }: CoachingPlanCardProps
         </Button>
       )}
     </div>
+  );
+}
+
+function CheckIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      aria-hidden="true"
+    >
+      <path
+        d="M3 8.5 6.5 12 13 4.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }

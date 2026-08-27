@@ -8,6 +8,11 @@
  * these same shapes, so none of the components below need to change.
  */
 
+export interface TransformationMetric {
+  label: string;
+  value: string;
+}
+
 export interface Transformation {
   id: string;
   clientName: string;
@@ -17,8 +22,9 @@ export interface Transformation {
   duration: string;
   category: string;
   description: string;
-  /** Optional short stat, e.g. "-12kg" or "+8kg lean mass". */
-  metric?: string;
+  /** Free-text label/value pairs entered by the coach, e.g. Duration / 16 weeks. */
+  metrics: TransformationMetric[];
+  featured?: boolean;
 }
 
 export interface Testimonial {
@@ -39,4 +45,12 @@ export interface CoachingPlan {
   features: string[];
   ctaLabel: string;
   featured?: boolean;
+  badge?: string;
+}
+
+export interface Faq {
+  id: string;
+  question: string;
+  answer: string;
+  category?: string;
 }

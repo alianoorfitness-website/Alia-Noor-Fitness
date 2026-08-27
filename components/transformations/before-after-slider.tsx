@@ -7,6 +7,8 @@ interface BeforeAfterSliderProps {
   beforeImage: string;
   afterImage: string;
   clientLabel: string;
+  /** Uses a taller aspect ratio for the featured/large card treatment. */
+  tall?: boolean;
 }
 
 /**
@@ -18,6 +20,7 @@ export function BeforeAfterSlider({
   beforeImage,
   afterImage,
   clientLabel,
+  tall = false,
 }: BeforeAfterSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(50);
@@ -58,7 +61,9 @@ export function BeforeAfterSlider({
   return (
     <div
       ref={containerRef}
-      className="relative aspect-[4/5] w-full touch-none select-none overflow-hidden rounded-[1.75rem] bg-surface"
+      className={`relative w-full touch-none select-none overflow-hidden rounded-[1.75rem] bg-surface ${
+        tall ? "aspect-[3/4] sm:aspect-[16/11]" : "aspect-[4/5]"
+      }`}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}

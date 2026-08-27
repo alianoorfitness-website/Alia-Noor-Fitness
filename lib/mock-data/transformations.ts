@@ -22,7 +22,7 @@ export const mockTransformations: Transformation[] = [
     category: "Fat Loss & Body Transformation",
     description:
       "A structured strength and nutrition program focused on sustainable fat loss without sacrificing muscle.",
-    metric: "-9 kg",
+    metrics: [{ label: "Result", value: "-9 kg" }],
   },
   {
     id: "t2",
@@ -33,7 +33,7 @@ export const mockTransformations: Transformation[] = [
     category: "Postpartum Fitness & Recovery",
     description:
       "A progressive postpartum recovery plan rebuilding core and pelvic floor strength before returning to full training.",
-    metric: "Core strength restored",
+    metrics: [{ label: "Result", value: "Core strength restored" }],
   },
   {
     id: "t3",
@@ -44,6 +44,6 @@ export const mockTransformations: Transformation[] = [
     category: "Strength Training",
     description:
       "A functional strength block emphasizing compound lifts and posture correction for everyday movement quality.",
-    metric: "+18% strength",
+    metrics: [{ label: "Result", value: "+18% strength" }],
   },
 ];

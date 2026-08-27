@@ -9,11 +9,12 @@ import { urlFor } from "@/lib/sanity/image";
 import type {
   CoachingPlanResult,
   CredentialResult,
+  FaqResult,
   SanityImageWithAlt,
   TestimonialResult,
   TransformationResult,
 } from "@/lib/sanity/types";
-import type { CoachingPlan, Testimonial, Transformation } from "@/lib/types/content";
+import type { CoachingPlan, Faq, Testimonial, Transformation } from "@/lib/types/content";
 
 /**
  * Builds a sized Sanity CDN URL for a given image field, or returns
@@ -35,8 +36,6 @@ export function mapTransformation(result: TransformationResult): Transformation 
   // entries missing either rather than rendering a broken comparison.
   if (!beforeImage || !afterImage) return null;
 
-  const primaryMetric = result.metrics?.[0];
-
   return {
     id: result._id,
     clientName: result.clientName,
@@ -45,7 +44,8 @@ export function mapTransformation(result: TransformationResult): Transformation 
     duration: result.duration,
     category: result.category,
     description: result.description,
-    metric: primaryMetric ? primaryMetric.value : undefined,
+    metrics: result.metrics ?? [],
+    featured: result.featured ?? false,
   };
 }
 
@@ -61,13 +61,16 @@ export function mapTestimonial(result: TestimonialResult): Testimonial {
 }
 
 /**
- * Maps a Sanity credential object into the `{ id, title }` shape used by
- * both the coach intro section's credential grid and the credential strip.
- * Credentials are objects, not documents, so there's no `_id` — a stable
- * key is derived from the title + index at the call site instead.
+ * Maps a Sanity credential object into the `{ id, title, level }` shape
+ * used by the coach intro section's credential grid. Credentials are
+ * objects, not documents, so there's no `_id` — a stable key is derived
+ * from the title + index at the call site instead.
  */
-export function mapCredentialTitle(result: CredentialResult, index: number): { id: string; title: string } {
-  return { id: `${result.title}-${index}`, title: result.title };
+export function mapCredentialTitle(
+  result: CredentialResult,
+  index: number
+): { id: string; title: string; level?: string | null } {
+  return { id: `${result.title}-${index}`, title: result.title, level: result.level };
 }
 
 export function mapCoachingPlan(result: CoachingPlanResult): CoachingPlan {
@@ -79,5 +82,15 @@ export function mapCoachingPlan(result: CoachingPlanResult): CoachingPlan {
     features: result.features,
     ctaLabel: result.ctaLabel,
     featured: result.featured ?? false,
+    badge: result.badge ?? undefined,
+  };
+}
+
+export function mapFaq(result: FaqResult): Faq {
+  return {
+    id: result._id,
+    question: result.question,
+    answer: result.answer,
+    category: result.category ?? undefined,
   };
 }

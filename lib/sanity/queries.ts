@@ -17,6 +17,7 @@ import type {
   CoachingPlanResult,
   CoachProfileResult,
   ExpertiseResult,
+  FaqResult,
   ProcessStepResult,
   SiteSettingsResult,
   TestimonialResult,
@@ -87,7 +88,8 @@ export const getExpertise = cache(async (): Promise<ExpertiseResult[]> => {
       description,
       category,
       iconKey,
-      order
+      order,
+      featured
     }
   `;
   return client.fetch<ExpertiseResult[]>(query);
@@ -165,3 +167,16 @@ export const getProcessSteps = cache(
     return client.fetch<ProcessStepResult[]>(query);
   }
 );
+
+export const getFaqs = cache(async (): Promise<FaqResult[]> => {
+  const query = /* groq */ `
+    *[_type == "faq" && published == true] | order(order asc) {
+      _id,
+      question,
+      answer,
+      category,
+      order
+    }
+  `;
+  return client.fetch<FaqResult[]>(query);
+});

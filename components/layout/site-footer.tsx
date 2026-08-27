@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { navLinks } from "@/components/layout/nav-links";
-import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import { buildConsultationMessage, buildWhatsAppUrl } from "@/lib/whatsapp";
 
 interface SiteFooterProps {
   siteTitle: string;
@@ -19,58 +19,72 @@ export function SiteFooter({
 }: SiteFooterProps) {
   const year = new Date().getFullYear();
   const whatsappUrl = whatsappNumber
-    ? buildWhatsAppUrl(
-        whatsappNumber,
-        `Hi Alia! I found your website and I'd like to know more about coaching.`
-      )
+    ? buildWhatsAppUrl(whatsappNumber, buildConsultationMessage())
     : null;
 
   return (
-    <footer id="contact" className="scroll-anchor border-t border-surface-border bg-surface">
-      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-16 sm:px-8">
-        <div className="flex flex-col justify-between gap-10 md:flex-row">
+    <footer id="contact" className="scroll-anchor border-t border-surface-border bg-ink text-canvas">
+      <div className="mx-auto px-6 py-16 sm:px-8 sm:py-20">
+        <div className="grid max-w-6xl grid-cols-1 gap-12 sm:mx-auto sm:grid-cols-[1.2fr_1fr_1fr]">
           <div className="max-w-sm">
-            <p className="font-display text-2xl text-ink">{siteTitle}</p>
-            <p className="mt-2 text-sm text-ink-muted">{location}</p>
-            <p className="mt-6 max-w-xs text-sm leading-relaxed text-ink-muted">
+            <p className="font-display text-2xl">{siteTitle}</p>
+            <p className="mt-2 text-sm text-canvas/60">{location}</p>
+            <p className="mt-6 max-w-xs text-sm leading-relaxed text-canvas/70">
               Certified personal training and coaching, built around your body,
               your schedule, and your goals.
             </p>
           </div>
 
-          <nav aria-label="Footer" className="flex flex-wrap gap-x-8 gap-y-3">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium text-ink-muted transition-colors hover:text-ink"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
+          <div>
+            <p className="mb-4 text-xs font-medium uppercase tracking-[0.16em] text-canvas/50">
+              Navigate
+            </p>
+            <nav aria-label="Footer" className="flex flex-col gap-3">
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm text-canvas/75 transition-colors hover:text-canvas"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+          </div>
 
-          <div className="flex flex-col gap-3 sm:items-end">
-            <Button href="#coaching" variant="secondary" className="w-full sm:w-auto">
-              Start Coaching
-            </Button>
-            {whatsappUrl ? (
-              <Button href={whatsappUrl} external variant="ghost" className="w-full sm:w-auto">
-                WhatsApp Alia
-              </Button>
-            ) : null}
-            {email ? (
+          <div>
+            <p className="mb-4 text-xs font-medium uppercase tracking-[0.16em] text-canvas/50">
+              Get In Touch
+            </p>
+            <div className="flex flex-col gap-3">
+              {whatsappUrl ? (
+                <Button
+                  href={whatsappUrl}
+                  external
+                  className="w-full justify-center bg-canvas text-ink hover:bg-highlight sm:w-auto"
+                >
+                  Chat on WhatsApp
+                </Button>
+              ) : null}
               <a
-                href={`mailto:${email}`}
-                className="text-sm text-ink-muted transition-colors hover:text-ink"
+                href="#coaching"
+                className="text-sm text-canvas/75 transition-colors hover:text-canvas"
               >
-                {email}
+                View Coaching Plans
               </a>
-            ) : null}
+              {email ? (
+                <a
+                  href={`mailto:${email}`}
+                  className="text-sm text-canvas/75 transition-colors hover:text-canvas"
+                >
+                  {email}
+                </a>
+              ) : null}
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 border-t border-surface-border pt-6 text-xs text-ink-faint sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto mt-14 flex max-w-6xl flex-col gap-2 border-t border-canvas/10 pt-6 text-xs text-canvas/50 sm:flex-row sm:items-center sm:justify-between">
           <p>
             &copy; {year} {siteTitle}. All rights reserved.
           </p>

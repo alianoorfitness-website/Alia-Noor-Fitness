@@ -16,18 +16,16 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
   if (testimonials.length === 0) return null;
 
   return (
-    <section id="testimonials" className="scroll-anchor bg-surface py-24 sm:py-32">
-      <div className="mx-auto max-w-4xl px-6 sm:px-8">
+    <section id="testimonials" className="scroll-anchor bg-surface py-20 sm:py-28 lg:py-32">
+      <div className="mx-auto max-w-5xl px-6 sm:px-8">
         <Reveal>
           <SectionHeading
             eyebrow="Testimonials"
             title="In their words."
-            align="center"
-            className="mx-auto"
           />
         </Reveal>
 
-        <Reveal delay={0.1} className="mt-14 rounded-[2rem] bg-canvas-raised p-8 sm:p-12">
+        <Reveal delay={0.1} className="mt-12 rounded-[2rem] bg-canvas-raised p-8 shadow-[0_30px_60px_-40px_rgba(28,26,25,0.25)] sm:p-12">
           <TestimonialsCarousel testimonials={testimonials} />
         </Reveal>
       </div>

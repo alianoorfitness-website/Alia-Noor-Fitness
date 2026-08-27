@@ -16,7 +16,7 @@ export function CoachingSection({ plans, whatsappNumber }: CoachingSectionProps)
   if (plans.length === 0) return null;
 
   return (
-    <section id="coaching" className="scroll-anchor py-24 sm:py-32">
+    <section id="coaching" className="scroll-anchor py-20 sm:py-28 lg:py-32">
       <div className="mx-auto max-w-6xl px-6 sm:px-8">
         <Reveal>
           <SectionHeading
@@ -29,7 +29,7 @@ export function CoachingSection({ plans, whatsappNumber }: CoachingSectionProps)
         </Reveal>
 
         <div
-          className={`mt-14 grid grid-cols-1 gap-6 ${
+          className={`mt-16 grid grid-cols-1 gap-6 sm:gap-8 ${
             plans.length === 1
               ? "mx-auto max-w-md"
               : plans.length === 2
