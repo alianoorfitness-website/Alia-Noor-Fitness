@@ -3,12 +3,25 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { navLinks } from "@/components/layout/nav-links";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
-import { siteConfig } from "@/lib/site-config";
 
-export function SiteFooter() {
+interface SiteFooterProps {
+  siteTitle: string;
+  location: string;
+  email: string;
+  whatsappNumber: string;
+  profession: string;
+}
+
+export function SiteFooter({
+  siteTitle,
+  location,
+  email,
+  whatsappNumber,
+  profession,
+}: SiteFooterProps) {
   const year = new Date().getFullYear();
   const whatsappUrl = buildWhatsAppUrl(
-    siteConfig.whatsappNumber,
+    whatsappNumber,
     `Hi Alia! I found your website and I'd like to know more about coaching.`
   );
 
@@ -17,8 +30,8 @@ export function SiteFooter() {
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-16 sm:px-8">
         <div className="flex flex-col justify-between gap-10 md:flex-row">
           <div className="max-w-sm">
-            <p className="font-display text-2xl text-ink">{siteConfig.name}</p>
-            <p className="mt-2 text-sm text-ink-muted">{siteConfig.location}</p>
+            <p className="font-display text-2xl text-ink">{siteTitle}</p>
+            <p className="mt-2 text-sm text-ink-muted">{location}</p>
             <p className="mt-6 max-w-xs text-sm leading-relaxed text-ink-muted">
               Certified personal training and coaching, built around your body,
               your schedule, and your goals.
@@ -45,19 +58,19 @@ export function SiteFooter() {
               WhatsApp Alia
             </Button>
             <a
-              href={`mailto:${siteConfig.email}`}
+              href={`mailto:${email}`}
               className="text-sm text-ink-muted transition-colors hover:text-ink"
             >
-              {siteConfig.email}
+              {email}
             </a>
           </div>
         </div>
 
         <div className="flex flex-col gap-2 border-t border-surface-border pt-6 text-xs text-ink-faint sm:flex-row sm:items-center sm:justify-between">
           <p>
-            &copy; {year} {siteConfig.name}. All rights reserved.
+            &copy; {year} {siteTitle}. All rights reserved.
           </p>
-          <p>Certified Personal Trainer &middot; {siteConfig.location}</p>
+          <p>{profession} &middot; {location}</p>
         </div>
       </div>
     </footer>

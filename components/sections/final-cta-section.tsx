@@ -1,10 +1,13 @@
 import { Reveal } from "@/components/ui/reveal";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
-import { siteConfig } from "@/lib/site-config";
 
-export function FinalCtaSection() {
+interface FinalCtaSectionProps {
+  whatsappNumber: string;
+}
+
+export function FinalCtaSection({ whatsappNumber }: FinalCtaSectionProps) {
   const whatsappUrl = buildWhatsAppUrl(
-    siteConfig.whatsappNumber,
+    whatsappNumber,
     "Hi Alia! I'm ready to start my transformation."
   );
 

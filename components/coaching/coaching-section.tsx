@@ -1,15 +1,20 @@
 import { CoachingPlanCard } from "@/components/coaching/coaching-plan-card";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { mockCoachingPlans } from "@/lib/mock-data/coaching-plans";
 import type { CoachingPlan } from "@/lib/types/content";
 
 interface CoachingSectionProps {
-  /** Defaults to temporary mock data; pass Sanity-sourced data once available. */
-  plans?: CoachingPlan[];
+  plans: CoachingPlan[];
+  whatsappNumber: string;
 }
 
-export function CoachingSection({ plans = mockCoachingPlans }: CoachingSectionProps) {
+/**
+ * Renders zero, one, or multiple plans depending on what's active in
+ * Sanity. Hides the section entirely if there are no active plans.
+ */
+export function CoachingSection({ plans, whatsappNumber }: CoachingSectionProps) {
+  if (plans.length === 0) return null;
+
   return (
     <section id="coaching" className="py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-6 sm:px-8">
@@ -26,7 +31,7 @@ export function CoachingSection({ plans = mockCoachingPlans }: CoachingSectionPr
         <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3">
           {plans.map((plan, index) => (
             <Reveal key={plan.id} delay={index * 0.08} className="h-full">
-              <CoachingPlanCard plan={plan} />
+              <CoachingPlanCard plan={plan} whatsappNumber={whatsappNumber} />
             </Reveal>
           ))}
         </div>

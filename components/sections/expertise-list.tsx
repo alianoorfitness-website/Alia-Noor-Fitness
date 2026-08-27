@@ -63,13 +63,13 @@ export function ExpertiseList({ groups }: ExpertiseListProps) {
                   <ul className="flex flex-wrap gap-3 pb-8 pl-0 sm:pl-16">
                     {group.items.map((item, itemIndex) => (
                       <motion.li
-                        key={item}
+                        key={item.id}
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: itemIndex * 0.04 }}
                         className="rounded-full border border-surface-border bg-canvas-raised px-4 py-2 text-sm text-ink"
                       >
-                        {item}
+                        {item.title}
                       </motion.li>
                     ))}
                   </ul>

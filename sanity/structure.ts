@@ -1,13 +1,36 @@
 import type { StructureResolver } from "sanity/structure";
 
 /**
- * Customizes the Studio's content pane structure. Left as the default
- * document list for now since no content schemas exist yet — revisit once
- * Coach, Transformations, Testimonials, Coaching Plans, and Site Settings
- * are added, so singleton documents (e.g. Site Settings) can be pinned to
- * the top instead of appearing in a generic list.
+ * Custom Studio structure so non-technical editors see an organized,
+ * purpose-built navigation instead of a flat alphabetical document list.
+ *
+ * Site Settings and Coach Profile behave as singletons: each is pinned to
+ * a single, fixed document ID (rather than the generic document type
+ * list), and the generic "Create new" action is hidden for those two
+ * types in sanity.config.ts (via document.newDocumentOptions) so editors
+ * can't accidentally create duplicates.
  */
 export const structure: StructureResolver = (S) =>
   S.list()
-    .title("Content")
-    .items(S.documentTypeListItems());
+    .title("Alia Noor Fitness")
+    .items([
+      S.listItem()
+        .title("Site Settings")
+        .id("siteSettings")
+        .child(
+          S.document().schemaType("siteSettings").documentId("siteSettings")
+        ),
+      S.listItem()
+        .title("Coach Profile")
+        .id("coachProfile")
+        .child(
+          S.document().schemaType("coachProfile").documentId("coachProfile")
+        ),
+      S.divider(),
+      S.documentTypeListItem("expertise").title("Expertise"),
+      S.documentTypeListItem("transformation").title("Transformations"),
+      S.documentTypeListItem("testimonial").title("Testimonials"),
+      S.documentTypeListItem("coachingPlan").title("Coaching Plans"),
+      S.documentTypeListItem("processStep").title("How It Works"),
+      S.documentTypeListItem("faq").title("FAQs"),
+    ]);

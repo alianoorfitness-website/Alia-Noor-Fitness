@@ -1,22 +1,22 @@
 import { TransformationCard } from "@/components/transformations/transformation-card";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { mockTransformations } from "@/lib/mock-data/transformations";
 import type { Transformation } from "@/lib/types/content";
 
 interface TransformationsSectionProps {
-  /** Defaults to temporary mock data; pass Sanity-sourced data once available. */
-  transformations?: Transformation[];
+  transformations: Transformation[];
 }
 
 /**
  * Renders client transformations as drag-to-compare before/after sliders.
- * Data is passed through props — see lib/mock-data/transformations.ts for
- * the temporary source used until Sanity schemas exist.
+ * Data comes from Sanity via app/page.tsx (see lib/sanity/queries.ts and
+ * lib/sanity/mappers.ts) — this component has no knowledge of Sanity and
+ * no fallback to mock data, so it hides itself entirely when there are no
+ * published transformations rather than ever showing fabricated content.
  */
-export function TransformationsSection({
-  transformations = mockTransformations,
-}: TransformationsSectionProps) {
+export function TransformationsSection({ transformations }: TransformationsSectionProps) {
+  if (transformations.length === 0) return null;
+
   return (
     <section id="transformations" className="py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-6 sm:px-8">

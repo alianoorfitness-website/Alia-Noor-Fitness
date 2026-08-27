@@ -1,30 +1,17 @@
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
+import type { ProcessStepResult } from "@/lib/sanity/types";
 
-const steps = [
-  {
-    number: "01",
-    title: "Apply",
-    description: "Tell Alia about your goals, schedule, and training history.",
-  },
-  {
-    number: "02",
-    title: "Consultation",
-    description: "A focused conversation to understand what a real plan for you looks like.",
-  },
-  {
-    number: "03",
-    title: "Personalized Plan",
-    description: "Training and nutrition built around your body, not a generic template.",
-  },
-  {
-    number: "04",
-    title: "Transform",
-    description: "Consistent coaching, adjustments, and accountability as you progress.",
-  },
-];
+interface HowItWorksSectionProps {
+  steps: ProcessStepResult[];
+}
 
-export function HowItWorksSection() {
+/**
+ * Renders nothing if there are no active process steps in Sanity.
+ */
+export function HowItWorksSection({ steps }: HowItWorksSectionProps) {
+  if (steps.length === 0) return null;
+
   return (
     <section className="bg-surface py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-6 sm:px-8">
@@ -39,7 +26,7 @@ export function HowItWorksSection() {
 
         <div className="mt-16 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {steps.map((step, index) => (
-            <Reveal key={step.number} delay={index * 0.1} className="relative">
+            <Reveal key={step._id} delay={index * 0.1} className="relative">
               <span className="font-display text-5xl text-accent-soft">{step.number}</span>
               <h3 className="mt-3 font-display text-xl text-ink">{step.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-ink-muted">

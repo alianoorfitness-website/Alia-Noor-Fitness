@@ -3,15 +3,19 @@
 import { motion } from "framer-motion";
 
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
-import { siteConfig } from "@/lib/site-config";
+
+interface WhatsAppFloatButtonProps {
+  whatsappNumber: string;
+}
 
 /**
  * Subtle floating WhatsApp CTA, present on every page. Uses the shared
  * lib/whatsapp.ts helper rather than constructing the wa.me URL inline.
+ * The number is passed in from Site Settings (see app/layout.tsx).
  */
-export function WhatsAppFloatButton() {
+export function WhatsAppFloatButton({ whatsappNumber }: WhatsAppFloatButtonProps) {
   const href = buildWhatsAppUrl(
-    siteConfig.whatsappNumber,
+    whatsappNumber,
     "Hi Alia! I'd like to know more about training with you."
   );
 

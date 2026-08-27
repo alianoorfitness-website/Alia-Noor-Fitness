@@ -5,7 +5,6 @@ import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
-import { siteConfig } from "@/lib/site-config";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -16,10 +15,41 @@ const fadeUp = {
   }),
 };
 
-export function HeroSection() {
+export interface HeroSectionProps {
+  headline: string;
+  subheadline: string;
+  primaryCtaLabel: string;
+  secondaryCtaLabel: string;
+  heroImageUrl: string;
+  heroImageAlt: string;
+  coachName: string;
+  profession: string;
+  location: string;
+  whatsappNumber: string;
+  yearsExperience: number;
+}
+
+/**
+ * Fully CMS-driven hero. All copy, the portrait image, and CTA labels come
+ * from Sanity Site Settings / Coach Profile via the page-level data layer —
+ * see app/page.tsx and lib/sanity/queries.ts.
+ */
+export function HeroSection({
+  headline,
+  subheadline,
+  primaryCtaLabel,
+  secondaryCtaLabel,
+  heroImageUrl,
+  heroImageAlt,
+  coachName,
+  profession,
+  location,
+  whatsappNumber,
+  yearsExperience,
+}: HeroSectionProps) {
   const whatsappUrl = buildWhatsAppUrl(
-    siteConfig.whatsappNumber,
-    "Hi Alia! I'd like to start my transformation."
+    whatsappNumber,
+    `Hi Alia! I'd like to start my transformation.`
   );
 
   return (
@@ -51,7 +81,7 @@ export function HeroSection() {
             variants={fadeUp}
             className="inline-flex w-fit items-center gap-2 rounded-full border border-surface-border bg-canvas-raised px-4 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-ink-muted"
           >
-            Certified Personal Trainer &middot; South Delhi
+            {profession} &middot; {location}
           </motion.span>
 
           <motion.h1
@@ -61,9 +91,7 @@ export function HeroSection() {
             variants={fadeUp}
             className="text-balance font-display text-5xl leading-[1.04] text-ink sm:text-6xl md:text-7xl"
           >
-            Build a stronger body.
-            <br />
-            <span className="italic text-accent-strong">Become a stronger you.</span>
+            {headline}
           </motion.h1>
 
           <motion.p
@@ -73,9 +101,7 @@ export function HeroSection() {
             variants={fadeUp}
             className="max-w-md text-balance text-base leading-relaxed text-ink-muted sm:text-lg"
           >
-            I&rsquo;m Alia Noor — a certified personal trainer and fitness coach
-            helping clients in South Delhi build strength, correct movement,
-            and transform sustainably through personalized coaching.
+            {subheadline}
           </motion.p>
 
           <motion.div
@@ -86,10 +112,10 @@ export function HeroSection() {
             className="flex flex-wrap items-center gap-4"
           >
             <Button href={whatsappUrl} external>
-              Start Your Transformation
+              {primaryCtaLabel}
             </Button>
             <Button href="#expertise" variant="secondary">
-              Explore Coaching
+              {secondaryCtaLabel}
             </Button>
           </motion.div>
 
@@ -100,7 +126,7 @@ export function HeroSection() {
             variants={fadeUp}
             className="flex items-center gap-3 pt-2"
           >
-            <span className="font-display text-3xl text-ink">4+</span>
+            <span className="font-display text-3xl text-ink">{yearsExperience}+</span>
             <span className="text-sm leading-tight text-ink-muted">
               Years of coaching
               <br />
@@ -117,8 +143,8 @@ export function HeroSection() {
         >
           <div className="relative mx-auto aspect-[3/4] w-full max-w-sm overflow-hidden rounded-[2rem] bg-surface sm:max-w-md lg:max-w-none">
             <Image
-              src="/mock/hero/coach-hero.svg"
-              alt="Portrait of Alia Noor, certified personal trainer"
+              src={heroImageUrl}
+              alt={heroImageAlt}
               fill
               priority
               sizes="(min-width: 1024px) 40vw, (min-width: 640px) 60vw, 90vw"
@@ -126,14 +152,11 @@ export function HeroSection() {
             />
             <div className="glass-panel absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl px-4 py-3 sm:bottom-6 sm:left-6 sm:right-6">
               <div>
-                <p className="font-display text-lg text-ink">Alia Noor</p>
+                <p className="font-display text-lg text-ink">{coachName}</p>
                 <p className="text-xs uppercase tracking-[0.14em] text-ink-muted">
-                  Fitness &amp; Nutrition Coach
+                  {profession}
                 </p>
               </div>
-              <span className="rounded-full bg-ink px-3 py-1 text-[11px] font-medium text-canvas">
-                EREPS
-              </span>
             </div>
           </div>
         </motion.div>

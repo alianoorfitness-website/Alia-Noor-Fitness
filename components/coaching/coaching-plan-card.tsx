@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { buildCoachingPlanMessage, buildWhatsAppUrl } from "@/lib/whatsapp";
-import { siteConfig } from "@/lib/site-config";
 import type { CoachingPlan } from "@/lib/types/content";
 
 const featuredCtaClasses =
@@ -8,11 +7,12 @@ const featuredCtaClasses =
 
 interface CoachingPlanCardProps {
   plan: CoachingPlan;
+  whatsappNumber: string;
 }
 
-export function CoachingPlanCard({ plan }: CoachingPlanCardProps) {
+export function CoachingPlanCard({ plan, whatsappNumber }: CoachingPlanCardProps) {
   const whatsappUrl = buildWhatsAppUrl(
-    siteConfig.whatsappNumber,
+    whatsappNumber,
     buildCoachingPlanMessage(plan.name)
   );
 
