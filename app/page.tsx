@@ -1,16 +1,25 @@
-/**
- * Placeholder home page for Phase 1 (foundation/architecture only).
- * The real homepage — hero, credibility, specializations, transformations,
- * testimonials, coaching plans, FAQ, final CTA, footer — is built in a
- * later phase once content and visual design are defined.
- */
+import { CoachIntroSection } from "@/components/sections/coach-intro-section";
+import { CredentialStrip } from "@/components/sections/credential-strip";
+import { ExpertiseSection } from "@/components/sections/expertise-section";
+import { FinalCtaSection } from "@/components/sections/final-cta-section";
+import { HowItWorksSection } from "@/components/sections/how-it-works-section";
+import { CoachingSection } from "@/components/coaching/coaching-section";
+import { HeroSection } from "@/components/hero/hero-section";
+import { TestimonialsSection } from "@/components/testimonials/testimonials-section";
+import { TransformationsSection } from "@/components/transformations/transformations-section";
+
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-2 p-8 text-center">
-      <h1 className="text-2xl font-semibold">Alia Noor Fitness Coaching</h1>
-      <p className="text-sm text-zinc-500">
-        Site foundation in progress. Content and design coming soon.
-      </p>
-    </main>
+    <>
+      <HeroSection />
+      <CredentialStrip />
+      <CoachIntroSection />
+      <ExpertiseSection />
+      <TransformationsSection />
+      <TestimonialsSection />
+      <CoachingSection />
+      <HowItWorksSection />
+      <FinalCtaSection />
+    </>
   );
 }
