@@ -16,7 +16,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
   if (testimonials.length === 0) return null;
 
   return (
-    <section id="testimonials" className="bg-surface py-24 sm:py-32">
+    <section id="testimonials" className="scroll-anchor bg-surface py-24 sm:py-32">
       <div className="mx-auto max-w-4xl px-6 sm:px-8">
         <Reveal>
           <SectionHeading

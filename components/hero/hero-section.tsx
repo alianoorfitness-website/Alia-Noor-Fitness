@@ -53,7 +53,7 @@ export function HeroSection({
   return (
     <section
       id="top"
-      className="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-28"
+      className="scroll-anchor relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-28"
     >
       {/* Subtle background texture — grain + soft radial glow, kept quiet
           so it never competes with the portrait or copy. */}

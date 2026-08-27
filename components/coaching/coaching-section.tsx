@@ -16,7 +16,7 @@ export function CoachingSection({ plans, whatsappNumber }: CoachingSectionProps)
   if (plans.length === 0) return null;
 
   return (
-    <section id="coaching" className="py-24 sm:py-32">
+    <section id="coaching" className="scroll-anchor py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-6 sm:px-8">
         <Reveal>
           <SectionHeading

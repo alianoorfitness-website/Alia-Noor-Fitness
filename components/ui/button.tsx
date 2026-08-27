@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { ComponentPropsWithoutRef } from "react";
 
 type Variant = "primary" | "secondary" | "ghost";
@@ -19,7 +18,7 @@ interface CommonProps {
 }
 
 type ButtonAsLink = CommonProps &
-  ComponentPropsWithoutRef<typeof Link> & { href: string };
+  ComponentPropsWithoutRef<"a"> & { href: string };
 
 type ButtonAsButton = CommonProps &
   ComponentPropsWithoutRef<"button"> & { href?: undefined };
@@ -31,8 +30,17 @@ type ButtonProps = ButtonAsLink | ButtonAsButton | ButtonAsAnchor;
 
 /**
  * Shared CTA button used across the homepage (nav, hero, coaching plans,
- * final CTA). Renders as an internal Link, an external anchor (for
- * WhatsApp/mailto links), or a plain button depending on props supplied.
+ * final CTA). Renders as a native anchor (internal same-page hash links or
+ * external WhatsApp/mailto links) or a plain button depending on props
+ * supplied.
+ *
+ * Internal links intentionally use a plain `<a>` rather than `next/link`.
+ * This site has a single route (`/`), so every internal link is a
+ * same-page hash anchor (`#coaching`, `#about`, etc.) — `next/link`'s
+ * client-side soft-navigation doesn't reliably trigger the browser's
+ * native scroll-to-anchor behavior for hash-only same-page navigations,
+ * which was causing clicks to update the URL without scrolling. A native
+ * anchor gets correct browser scrolling for free.
  */
 export function Button(props: ButtonProps) {
   const { variant = "primary", className = "", ...rest } = props;
@@ -51,7 +59,7 @@ export function Button(props: ButtonProps) {
         />
       );
     }
-    return <Link {...(rest as ButtonAsLink)} className={classes} />;
+    return <a {...(rest as ButtonAsLink)} className={classes} />;
   }
 
   return <button {...(rest as ButtonAsButton)} className={classes} />;

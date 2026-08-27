@@ -46,7 +46,7 @@ export function ExpertiseSection({ items }: ExpertiseSectionProps) {
   if (groups.length === 0) return null;
 
   return (
-    <section id="expertise" className="bg-surface py-24 sm:py-32">
+    <section id="expertise" className="scroll-anchor bg-surface py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-6 sm:px-8">
         <Reveal>
           <SectionHeading

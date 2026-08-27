@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import { navLinks } from "@/components/layout/nav-links";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
@@ -28,7 +26,7 @@ export function SiteFooter({
     : null;
 
   return (
-    <footer id="contact" className="border-t border-surface-border bg-surface">
+    <footer id="contact" className="scroll-anchor border-t border-surface-border bg-surface">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-16 sm:px-8">
         <div className="flex flex-col justify-between gap-10 md:flex-row">
           <div className="max-w-sm">
@@ -42,13 +40,13 @@ export function SiteFooter({
 
           <nav aria-label="Footer" className="flex flex-wrap gap-x-8 gap-y-3">
             {navLinks.map((link) => (
-              <Link
+              <a
                 key={link.href}
                 href={link.href}
                 className="text-sm font-medium text-ink-muted transition-colors hover:text-ink"
               >
                 {link.label}
-              </Link>
+              </a>
             ))}
           </nav>
 

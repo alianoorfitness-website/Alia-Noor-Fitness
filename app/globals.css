@@ -84,6 +84,18 @@
 }
 
 @layer utilities {
+  /*
+   * Applied to every section that's a hash-anchor navigation target
+   * (#about, #expertise, #transformations, #testimonials, #coaching,
+   * #contact, plus the hero's #top). The header is `position: fixed`, so
+   * it's taken out of the layout flow and would otherwise sit on top of
+   * whatever the browser scrolls to — this offsets the scroll landing
+   * position below the floating nav instead of relying on JS scrolling.
+   */
+  .scroll-anchor {
+    scroll-margin-top: 6rem;
+  }
+
   .glass-panel {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);

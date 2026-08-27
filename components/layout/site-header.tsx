@@ -1,7 +1,6 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -45,7 +44,7 @@ export function SiteHeader() {
           scrolled ? "glass-panel shadow-[0_8px_30px_-12px_rgba(28,26,25,0.25)]" : "bg-transparent"
         }`}
       >
-        <Link
+        <a
           href="#top"
           className="font-display text-lg leading-none tracking-tight text-ink sm:text-xl"
         >
@@ -53,17 +52,17 @@ export function SiteHeader() {
           <span className="ml-1.5 hidden text-xs font-sans font-medium uppercase tracking-[0.2em] text-ink-muted sm:inline">
             Fitness
           </span>
-        </Link>
+        </a>
 
         <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
           {navLinks.map((link) => (
-            <Link
+            <a
               key={link.href}
               href={link.href}
               className="text-sm font-medium text-ink-muted transition-colors hover:text-ink"
             >
               {link.label}
-            </Link>
+            </a>
           ))}
         </nav>
 
@@ -96,14 +95,14 @@ export function SiteHeader() {
             className="glass-panel absolute inset-x-4 top-20 z-40 flex flex-col gap-1 rounded-3xl p-4 shadow-[0_20px_50px_-20px_rgba(28,26,25,0.35)] sm:inset-x-6"
           >
             {navLinks.map((link) => (
-              <Link
+              <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
                 className="rounded-xl px-4 py-3 text-base font-medium text-ink transition-colors hover:bg-ink/5"
               >
                 {link.label}
-              </Link>
+              </a>
             ))}
             <div className="mt-2 px-4">
               <Button

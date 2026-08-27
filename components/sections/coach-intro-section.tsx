@@ -36,7 +36,7 @@ export function CoachIntroSection({
   associationExperience,
 }: CoachIntroSectionProps) {
   return (
-    <section id="about" className="py-24 sm:py-32">
+    <section id="about" className="scroll-anchor py-24 sm:py-32">
       <div
         className={`mx-auto grid max-w-6xl grid-cols-1 items-start gap-14 px-6 sm:px-8 lg:gap-16 ${
           profileImageUrl ? "lg:grid-cols-[0.85fr_1.15fr]" : ""
