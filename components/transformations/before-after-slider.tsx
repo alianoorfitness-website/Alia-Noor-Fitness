@@ -7,20 +7,26 @@ interface BeforeAfterSliderProps {
   beforeImage: string;
   afterImage: string;
   clientLabel: string;
-  /** Uses a taller aspect ratio for the featured/large card treatment. */
-  tall?: boolean;
 }
 
 /**
  * Touch- and mouse-friendly before/after comparison slider. Dragging the
  * handle (via pointer events, which unify mouse/touch/pen) reveals more or
  * less of the "after" image over the "before" image beneath it.
+ *
+ * Uses a fixed portrait aspect ratio (3:4) so the image container is
+ * identical for every card regardless of each uploaded photo's own
+ * dimensions — most of the source transformation photos are
+ * portrait/vertical, so the container is built around that shape rather
+ * than letting the tallest image dictate card height. `object-contain`
+ * keeps the full photo visible within that fixed box (never cropped or
+ * stretched) instead of `object-cover`, which would crop portrait images
+ * to fit a wider frame.
  */
 export function BeforeAfterSlider({
   beforeImage,
   afterImage,
   clientLabel,
-  tall = false,
 }: BeforeAfterSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(50);
@@ -61,9 +67,7 @@ export function BeforeAfterSlider({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full touch-none select-none overflow-hidden rounded-[1.75rem] bg-surface ${
-        tall ? "aspect-[3/4] sm:aspect-[16/11]" : "aspect-[4/5]"
-      }`}
+      className="relative aspect-[3/4] w-full touch-none select-none bg-surface"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
@@ -72,8 +76,8 @@ export function BeforeAfterSlider({
         src={beforeImage}
         alt={`${clientLabel} before transformation`}
         fill
-        sizes="(min-width: 1024px) 40vw, 90vw"
-        className="pointer-events-none object-cover"
+        sizes="(min-width: 1024px) 32vw, (min-width: 640px) 46vw, 92vw"
+        className="pointer-events-none object-contain"
       />
 
       <div
@@ -84,8 +88,8 @@ export function BeforeAfterSlider({
           src={afterImage}
           alt={`${clientLabel} after transformation`}
           fill
-          sizes="(min-width: 1024px) 40vw, 90vw"
-          className="object-cover"
+          sizes="(min-width: 1024px) 32vw, (min-width: 640px) 46vw, 92vw"
+          className="object-contain"
         />
       </div>
 
@@ -100,15 +104,15 @@ export function BeforeAfterSlider({
         className="absolute inset-y-0 flex w-0.5 -translate-x-1/2 cursor-ew-resize flex-col items-center justify-center bg-canvas-raised/80"
         style={{ left: `${position}%` }}
       >
-        <span className="glass-panel flex h-10 w-10 items-center justify-center rounded-full text-ink shadow-[0_6px_20px_-8px_rgba(28,26,25,0.4)]">
+        <span className="glass-panel flex h-8 w-8 items-center justify-center rounded-full text-ink shadow-[0_6px_20px_-8px_rgba(28,26,25,0.4)] sm:h-9 sm:w-9">
           <ArrowsIcon />
         </span>
       </div>
 
-      <span className="pointer-events-none absolute left-4 top-4 rounded-full bg-canvas-raised/90 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-ink-muted">
+      <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-canvas-raised/90 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-ink-muted">
         Before
       </span>
-      <span className="pointer-events-none absolute right-4 top-4 rounded-full bg-ink/90 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-canvas">
+      <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-ink/90 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-canvas">
         After
       </span>
     </div>
@@ -117,7 +121,7 @@ export function BeforeAfterSlider({
 
 function ArrowsIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
       <path
         d="M5 3 1 8l4 5M11 3l4 5-4 5"
         stroke="currentColor"
