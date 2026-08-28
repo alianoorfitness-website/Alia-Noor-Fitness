@@ -8,11 +8,17 @@
  * export is wrapped in React's `cache()` so that if both the root layout
  * and the homepage need the same data (e.g. Site Settings) within a
  * single request, it's only fetched once.
+ *
+ * Fetching goes through `sanityFetch` (lib/sanity/live.ts) rather than
+ * `client.fetch` directly. `sanityFetch` tags each cached result with the
+ * sync tags Content Lake returns for that specific query, which is what
+ * lets `<SanityLive />` revalidate exactly the right cached data the moment
+ * a document is published — see lib/sanity/live.ts for details.
  */
 
 import { cache } from "react";
 
-import { client } from "@/lib/sanity/client";
+import { sanityFetch } from "@/lib/sanity/live";
 import type {
   CoachingPlanResult,
   CoachProfileResult,
@@ -48,7 +54,8 @@ export const getSiteSettings = cache(
         seoDescription
       }
     `;
-    return client.fetch<SiteSettingsResult | null>(query);
+    const { data } = await sanityFetch({ query, stega: false });
+    return data as SiteSettingsResult | null;
   }
 );
 
@@ -75,7 +82,8 @@ export const getCoachProfile = cache(
         } | order(order asc)
       }
     `;
-    return client.fetch<CoachProfileResult | null>(query);
+    const { data } = await sanityFetch({ query, stega: false });
+    return data as CoachProfileResult | null;
   }
 );
 
@@ -92,7 +100,8 @@ export const getExpertise = cache(async (): Promise<ExpertiseResult[]> => {
       featured
     }
   `;
-  return client.fetch<ExpertiseResult[]>(query);
+  const { data } = await sanityFetch({ query, stega: false });
+  return data as ExpertiseResult[];
 });
 
 export const getTransformations = cache(
@@ -111,7 +120,8 @@ export const getTransformations = cache(
         order
       }
     `;
-    return client.fetch<TransformationResult[]>(query);
+    const { data } = await sanityFetch({ query, stega: false });
+    return data as TransformationResult[];
   }
 );
 
@@ -129,7 +139,8 @@ export const getTestimonials = cache(
         order
       }
     `;
-    return client.fetch<TestimonialResult[]>(query);
+    const { data } = await sanityFetch({ query, stega: false });
+    return data as TestimonialResult[];
   }
 );
 
@@ -149,7 +160,8 @@ export const getCoachingPlans = cache(
         ctaLabel
       }
     `;
-    return client.fetch<CoachingPlanResult[]>(query);
+    const { data } = await sanityFetch({ query, stega: false });
+    return data as CoachingPlanResult[];
   }
 );
 
@@ -164,7 +176,8 @@ export const getProcessSteps = cache(
         order
       }
     `;
-    return client.fetch<ProcessStepResult[]>(query);
+    const { data } = await sanityFetch({ query, stega: false });
+    return data as ProcessStepResult[];
   }
 );
 
@@ -178,5 +191,6 @@ export const getFaqs = cache(async (): Promise<FaqResult[]> => {
       order
     }
   `;
-  return client.fetch<FaqResult[]>(query);
+  const { data } = await sanityFetch({ query, stega: false });
+  return data as FaqResult[];
 });

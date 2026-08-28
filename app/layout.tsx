@@ -6,6 +6,7 @@ import { env } from "@/lib/env";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { WhatsAppFloatButton } from "@/components/layout/whatsapp-float-button";
+import { SanityLive } from "@/lib/sanity/live";
 import { getSiteSettings } from "@/lib/sanity/queries";
 
 const inter = Inter({
@@ -89,6 +90,13 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         {whatsappNumber ? (
           <WhatsAppFloatButton whatsappNumber={whatsappNumber} />
         ) : null}
+        {/*
+          Opens a live event connection to Sanity so that when a document is
+          published in Studio, the cached tags affected by that change are
+          revalidated on the running production server immediately — no
+          Vercel redeploy required. See lib/sanity/live.ts.
+        */}
+        <SanityLive />
       </body>
     </html>
   );
