@@ -72,21 +72,36 @@ export function BeforeAfterSlider({
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
     >
+      {/*
+        Base (bottom) layer: always fully visible except where the overlay
+        below covers it. The overlay is clipped to the LEFT `position`% of
+        the box (see its clip-path), which means this base layer is what
+        shows through on the RIGHT — i.e. on the "After" side. Using
+        afterImage here (not beforeImage) is what keeps it aligned with
+        the "After" label anchored to the top-right corner.
+      */}
       <Image
-        src={beforeImage}
-        alt={`${clientLabel} before transformation`}
+        src={afterImage}
+        alt={`${clientLabel} after transformation`}
         fill
         sizes="(min-width: 1024px) 32vw, (min-width: 640px) 46vw, 92vw"
         className="pointer-events-none object-contain"
       />
 
+      {/*
+        Overlay (top) layer: clipped to only the left `position`% of the
+        box via `inset(top right bottom left)` — cutting away the right
+        `100 - position`% leaves the left `position`% visible. That left
+        side is where the "Before" label is anchored, so beforeImage (not
+        afterImage) belongs here.
+      */}
       <div
         className="pointer-events-none absolute inset-0 overflow-hidden"
         style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
       >
         <Image
-          src={afterImage}
-          alt={`${clientLabel} after transformation`}
+          src={beforeImage}
+          alt={`${clientLabel} before transformation`}
           fill
           sizes="(min-width: 1024px) 32vw, (min-width: 640px) 46vw, 92vw"
           className="object-contain"
