@@ -25,18 +25,17 @@ export function ExpertiseSection({ items }: ExpertiseSectionProps) {
   if (items.length === 0) return null;
 
   return (
-    <section id="expertise" className="scroll-anchor bg-surface py-20 sm:py-28 lg:py-32">
+    <section id="expertise" className="scroll-anchor bg-surface py-16 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-4xl px-6 sm:px-8">
         <Reveal>
           <SectionHeading
             eyebrow="Expertise"
             title="What I Help You Build"
-            description="Every program folds into one coaching relationship — movement quality, strength, and nutrition working together rather than in isolation."
             className="max-w-2xl"
           />
         </Reveal>
 
-        <div className="mt-12 flex flex-col divide-y divide-surface-border border-y border-surface-border sm:mt-16">
+        <div className="mt-8 flex flex-col divide-y divide-surface-border border-y border-surface-border sm:mt-10">
           {items.map((item, index) => {
             const isOpen = item._id === openId;
             const hasDetail = Boolean(item.description);
@@ -48,19 +47,19 @@ export function ExpertiseSection({ items }: ExpertiseSectionProps) {
                     onClick={() => hasDetail && setOpenId(isOpen ? null : item._id)}
                     aria-expanded={hasDetail ? isOpen : undefined}
                     aria-controls={hasDetail ? `expertise-panel-${item._id}` : undefined}
-                    className={`flex w-full items-start gap-5 py-6 text-left sm:gap-8 sm:py-8 ${
+                    className={`flex w-full items-center gap-4 py-4 text-left sm:gap-6 sm:py-5 ${
                       hasDetail ? "cursor-pointer" : "cursor-default"
                     }`}
                   >
-                    <span className="shrink-0 font-display text-2xl font-semibold text-accent sm:text-3xl">
+                    <span className="shrink-0 font-display text-xl font-semibold text-accent sm:text-2xl">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <h3 className="break-words font-display text-2xl font-semibold leading-snug text-ink sm:text-3xl">
+                      <h3 className="break-words font-display text-lg font-semibold leading-snug text-ink sm:text-xl">
                         {item.title}
                       </h3>
                       {item.shortDescription ? (
-                        <p className="mt-2 max-w-xl break-words text-sm leading-relaxed text-ink-muted sm:text-base">
+                        <p className="mt-1 max-w-xl break-words text-sm leading-relaxed text-ink-muted">
                           {item.shortDescription}
                         </p>
                       ) : null}
@@ -70,7 +69,7 @@ export function ExpertiseSection({ items }: ExpertiseSectionProps) {
                         aria-hidden="true"
                         animate={{ rotate: isOpen ? 45 : 0 }}
                         transition={{ duration: 0.2 }}
-                        className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-surface-border text-lg text-ink"
+                        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-surface-border text-base text-ink"
                       >
                         +
                       </motion.span>
@@ -87,7 +86,7 @@ export function ExpertiseSection({ items }: ExpertiseSectionProps) {
                           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                           className="overflow-hidden"
                         >
-                          <p className="max-w-xl break-words pb-6 pl-[3.25rem] text-sm leading-relaxed text-ink-muted sm:pl-[4.5rem] sm:text-base">
+                          <p className="max-w-xl break-words pb-5 pl-[2.75rem] text-sm leading-relaxed text-ink-muted sm:pl-[3.5rem]">
                             {item.description}
                           </p>
                         </motion.div>

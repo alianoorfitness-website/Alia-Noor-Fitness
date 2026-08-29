@@ -67,7 +67,7 @@ export function BeforeAfterSlider({
   return (
     <div
       ref={containerRef}
-      className="relative aspect-[3/4] w-full touch-none select-none bg-surface"
+      className="relative aspect-[4/5] w-full touch-none select-none bg-surface"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}

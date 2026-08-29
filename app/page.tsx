@@ -1,10 +1,8 @@
 import { CoachIntroSection } from "@/components/sections/coach-intro-section";
-import { CredentialStrip } from "@/components/sections/credential-strip";
 import { ExpertiseSection } from "@/components/sections/expertise-section";
 import { FaqSection } from "@/components/sections/faq-section";
 import { FinalCtaSection } from "@/components/sections/final-cta-section";
 import { HowItWorksSection } from "@/components/sections/how-it-works-section";
-import { StatsStrip } from "@/components/sections/stats-strip";
 import { CoachingSection } from "@/components/coaching/coaching-section";
 import { HeroSection } from "@/components/hero/hero-section";
 import { TestimonialsSection } from "@/components/testimonials/testimonials-section";
@@ -66,27 +64,7 @@ export default async function Home() {
   const coachCredentials = (coachProfile?.credentials ?? []).map(
     mapCredentialTitle
   );
-
-  // Trust/metrics strip: only real, derivable values — never a fabricated
-  // business claim like a client count that isn't actually stored anywhere.
-  const statsItems = [
-    coachProfile?.yearsExperience
-      ? { id: "years", value: `${coachProfile.yearsExperience}+`, label: "Years Experience" }
-      : null,
-    transformations.length > 0
-      ? {
-          id: "transformations",
-          value: `${transformations.length}+`,
-          label: "Client Transformations",
-        }
-      : null,
-    expertiseItems.length > 0
-      ? { id: "expertise", value: `${expertiseItems.length}+`, label: "Coaching Specialties" }
-      : null,
-    coachCredentials.length > 0
-      ? { id: "credentials", value: `${coachCredentials.length}+`, label: "Certifications" }
-      : null,
-  ].filter((item): item is { id: string; value: string; label: string } => item !== null);
+  const coachProfileImageUrl = sanityImageUrl(coachProfile?.profileImage, 700);
 
   return (
     <>
@@ -107,20 +85,18 @@ export default async function Home() {
         />
       ) : null}
 
-      <StatsStrip items={statsItems} />
-
       {coachProfile ? (
         <CoachIntroSection
           coachName={coachProfile.name}
           introduction={coachProfile.introduction}
           coachingPhilosophy={coachProfile.coachingPhilosophy}
-          associationLabel={coachProfile.currentAssociation}
-          associationExperience={coachProfile.associationExperience}
+          profileImageUrl={coachProfileImageUrl}
+          profileImageAlt={coachProfile.profileImage?.alt ?? coachProfile.name}
+          credentials={coachCredentials}
           yearsExperience={coachProfile.yearsExperience}
         />
       ) : null}
 
-      <CredentialStrip items={coachCredentials} />
       <ExpertiseSection items={expertiseItems} />
       <TransformationsSection transformations={transformations} />
       <TestimonialsSection testimonials={testimonials} />

@@ -26,29 +26,26 @@ export function TransformationCard({ transformation }: TransformationCardProps) 
         afterImage={transformation.afterImage}
         clientLabel={transformation.clientName}
       />
-      <div className="flex flex-1 flex-col gap-3 p-5">
-        <div className="flex flex-wrap items-start justify-between gap-2">
+      <div className="flex flex-1 flex-col gap-1.5 p-3.5">
+        <div className="flex flex-wrap items-start justify-between gap-1.5">
           <div className="min-w-0">
-            <p className="break-words text-[11px] font-medium uppercase tracking-[0.14em] text-accent">
+            <p className="break-words text-[10px] font-medium uppercase tracking-[0.12em] text-accent">
               {transformation.category}
             </p>
-            <p className="mt-0.5 break-words font-display text-lg font-medium leading-snug text-ink">
+            <p className="mt-0.5 break-words font-display text-base font-medium leading-snug text-ink">
               {transformation.clientName}
             </p>
           </div>
-          <span className="shrink-0 rounded-full border border-surface-border bg-surface px-2.5 py-1 text-[11px] font-medium text-ink-muted">
+          <span className="shrink-0 rounded-full border border-surface-border bg-surface px-2 py-0.5 text-[10px] font-medium text-ink-muted">
             {transformation.duration}
           </span>
         </div>
-        <p className="break-words text-sm leading-relaxed text-ink-muted">
-          {transformation.description}
-        </p>
         {transformation.metrics.length > 0 ? (
-          <div className="mt-auto flex flex-wrap gap-2 pt-1">
+          <div className="mt-auto flex flex-wrap gap-1.5 pt-0.5">
             {transformation.metrics.map((metric) => (
               <span
                 key={metric.label}
-                className="rounded-full bg-accent-soft px-2.5 py-1 text-[11px] font-medium text-accent-strong"
+                className="rounded-full bg-accent-soft px-2 py-0.5 text-[10px] font-medium text-accent-strong"
               >
                 {metric.label}: {metric.value}
               </span>

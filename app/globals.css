@@ -17,9 +17,9 @@
 
   /* Warm peach/coral accent — the site's single accent hue, used sparingly
      for primary CTAs, highlighted words, and small UI accents. */
-  --accent: #e08a63;
-  --accent-strong: #c96a46;
-  --accent-soft: #f6ddc9;
+  --accent: #e8a078;
+  --accent-strong: #d98a63;
+  --accent-soft: #f6dcc9;
 
   /* Warm neutral surface for cards/panels. */
   --surface: #efe8e0;
@@ -27,16 +27,19 @@
 
   /* Lighter peach, used for highlighted text on dark backgrounds (hero,
      final CTA) where --accent itself wouldn't have enough contrast. */
-  --highlight: #f3ac82;
+  --highlight: #f0b48c;
 
   --success: #4f6f52;
 
-  /* Deep blue/teal hero gradient — coded here, never baked into the
-     uploaded Sanity hero image. See .hero-gradient below and
+  /* Deep blue/teal hero palette — coded here, never baked into the
+     uploaded Sanity hero image. Tuned to match the tones already present
+     in the local hero background photo (public/hero/hero-background.png)
+     so the coded scrim/gradient overlay blends with it rather than
+     fighting it. See .hero-gradient / .hero-photo-scrim below and
      components/hero/hero-section.tsx. */
-  --hero-navy: #0a2233;
-  --hero-teal: #123c4c;
-  --hero-teal-light: #1f6478;
+  --hero-navy: #063b50;
+  --hero-teal: #084b66;
+  --hero-teal-light: #0e6e8c;
 
   /* Glassmorphism surfaces — used selectively, not everywhere. */
   --glass-bg: rgba(255, 253, 251, 0.6);
@@ -171,18 +174,31 @@
    static frame — nothing additional needed here. */
 
 /*
- * Hero background gradient — coded entirely here, never part of the
- * uploaded Sanity hero image. Deep navy in the lower-left corner,
- * warming toward a lighter teal in the upper-right (behind where the
- * subject's head/shoulders sit), so the transparent cutout in
- * hero-section.tsx reads as if it's standing inside real depth rather
- * than pasted onto a flat color.
+ * Coded deep blue/teal gradient used where there's no photo backing it
+ * (final CTA, footer). Deep navy in the lower-left corner, warming toward
+ * a lighter teal in the upper-right.
  */
 .hero-gradient {
   background-image:
     radial-gradient(ellipse 90% 70% at 82% 8%, var(--hero-teal-light) 0%, transparent 60%),
     radial-gradient(ellipse 70% 60% at 100% 100%, var(--hero-teal) 0%, transparent 65%),
     linear-gradient(160deg, var(--hero-teal) 0%, var(--hero-navy) 65%, var(--hero-navy) 100%);
+}
+
+/*
+ * Hero background PHOTO treatment (components/hero/hero-section.tsx).
+ * The photo itself (public/hero/hero-background.png) is the lowest visual
+ * layer; this scrim sits directly on top of it — still entirely coded,
+ * never part of the uploaded asset — to (a) deepen the corners for text
+ * contrast and (b) tie the photo's existing blue/teal tones to the same
+ * palette used everywhere else on the site (final CTA, footer, buttons).
+ * Left semi-transparent in the upper-right where the transparent Sanity
+ * cutout is positioned, so the photo's own depth shows through there.
+ */
+.hero-photo-scrim {
+  background-image:
+    linear-gradient(100deg, rgba(6, 26, 36, 0.65) 0%, rgba(6, 26, 36, 0.35) 38%, rgba(6, 26, 36, 0.08) 65%),
+    linear-gradient(to top, rgba(4, 18, 25, 0.55) 0%, transparent 32%);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -15,10 +15,11 @@ interface CoachingSectionProps {
  * Desktop (`sm`+): a real CSS grid, so every card in a row stretches to
  * the same height automatically regardless of feature-list length.
  *
- * Mobile: a horizontally swipeable row (scroll-snap) — "[ Plan 1 ]
- * [ Partial Plan 2 → ]" — rather than stacking every plan vertically.
- * `overflow-x-auto` is scoped to this row only, so the page itself never
- * overflows horizontally.
+ * Mobile: plans stack vertically (not a horizontal carousel) — with only
+ * three plans, comparing them side by side matters more than saving
+ * vertical space, and a carousel would make that comparison awkward.
+ * Each card's own "View More" interaction (see CoachingPlanCard) keeps
+ * the default stacked view compact.
  */
 export function CoachingSection({ plans, whatsappNumber }: CoachingSectionProps) {
   if (plans.length === 0) return null;
@@ -26,37 +27,28 @@ export function CoachingSection({ plans, whatsappNumber }: CoachingSectionProps)
   const isSingle = plans.length === 1;
 
   return (
-    <section id="coaching" className="scroll-anchor py-20 sm:py-28 lg:py-32">
+    <section id="coaching" className="scroll-anchor py-16 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-6xl px-6 sm:px-8">
         <Reveal>
           <SectionHeading
-            eyebrow="Coaching"
-            title="A coaching path for where you are."
-            description="Every plan is a real coaching relationship, not a template. Apply and we'll figure out the right fit together."
+            eyebrow="Coaching Plans"
+            title="Choose Your Path"
             align="center"
             className="mx-auto max-w-2xl"
           />
         </Reveal>
-      </div>
 
-      <div className="mt-10 sm:mt-16">
         <div
-          className={`no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 sm:mx-auto sm:max-w-6xl sm:grid sm:snap-none sm:gap-8 sm:overflow-visible sm:px-8 sm:pb-0 ${
+          className={`mt-10 grid grid-cols-1 gap-5 sm:mt-12 ${
             isSingle
-              ? "sm:mx-auto sm:max-w-md"
+              ? "mx-auto max-w-md"
               : plans.length === 2
-                ? "sm:mx-auto sm:max-w-3xl sm:grid-cols-2"
+                ? "mx-auto max-w-3xl sm:grid-cols-2"
                 : "md:grid-cols-3"
           }`}
         >
           {plans.map((plan, index) => (
-            <Reveal
-              key={plan.id}
-              delay={index * 0.08}
-              className={`h-full shrink-0 snap-start sm:w-auto sm:shrink ${
-                isSingle ? "w-[85%] max-w-[320px]" : "w-[80%] max-w-[300px]"
-              }`}
-            >
+            <Reveal key={plan.id} delay={index * 0.08} className="h-full">
               <CoachingPlanCard plan={plan} whatsappNumber={whatsappNumber} />
             </Reveal>
           ))}

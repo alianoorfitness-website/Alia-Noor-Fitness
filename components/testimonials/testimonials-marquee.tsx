@@ -12,7 +12,7 @@ interface TestimonialsMarqueeProps {
 const SECONDS_PER_ITEM = 7;
 const MIN_DURATION_SECONDS = 24;
 
-const CARD_WIDTH_CLASSES = "w-[260px] shrink-0 sm:w-[340px] md:w-[380px]";
+const CARD_WIDTH_CLASSES = "w-[240px] shrink-0 sm:w-[280px] md:w-[300px]";
 
 /**
  * Continuously scrolling, seamless horizontal testimonial loop. Purely

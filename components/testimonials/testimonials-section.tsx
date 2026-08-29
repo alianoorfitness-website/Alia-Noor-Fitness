@@ -1,7 +1,6 @@
 import { TestimonialCard } from "@/components/testimonials/testimonial-card";
 import { TestimonialsMarquee } from "@/components/testimonials/testimonials-marquee";
 import { Reveal } from "@/components/ui/reveal";
-import { SectionHeading } from "@/components/ui/section-heading";
 import type { Testimonial } from "@/lib/types/content";
 
 interface TestimonialsSectionProps {
@@ -22,21 +21,23 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
   if (testimonials.length === 0) return null;
 
   return (
-    <section id="testimonials" className="scroll-anchor overflow-hidden bg-surface py-20 sm:py-28 lg:py-32">
+    <section id="testimonials" className="scroll-anchor overflow-hidden bg-ink py-16 text-canvas sm:py-20 lg:py-24">
       <div className="mx-auto max-w-6xl px-6 sm:px-8">
         <Reveal>
-          <SectionHeading eyebrow="Testimonials" title="In their words." />
+          <span className="text-xs font-medium uppercase tracking-[0.2em] text-highlight">
+            Client Testimonials
+          </span>
         </Reveal>
       </div>
 
       {testimonials.length === 1 ? (
-        <div className="mx-auto mt-12 max-w-xl px-6 sm:px-8">
+        <div className="mx-auto mt-6 max-w-xl px-6 sm:px-8">
           <Reveal delay={0.1}>
             <TestimonialCard testimonial={testimonials[0]} />
           </Reveal>
         </div>
       ) : (
-        <Reveal delay={0.1} className="mt-12">
+        <Reveal delay={0.1} className="mt-6">
           <TestimonialsMarquee testimonials={testimonials} />
         </Reveal>
       )}

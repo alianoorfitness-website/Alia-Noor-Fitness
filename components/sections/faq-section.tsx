@@ -23,7 +23,7 @@ export function FaqSection({ faqs }: FaqSectionProps) {
   if (faqs.length === 0) return null;
 
   return (
-    <section className="py-20 sm:py-28 lg:py-32">
+    <section className="py-16 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-3xl px-6 sm:px-8">
         <Reveal>
           <SectionHeading
@@ -34,7 +34,7 @@ export function FaqSection({ faqs }: FaqSectionProps) {
           />
         </Reveal>
 
-        <Reveal delay={0.1} className="mt-12 flex flex-col divide-y divide-surface-border border-y border-surface-border">
+        <Reveal delay={0.1} className="mt-8 flex flex-col divide-y divide-surface-border border-y border-surface-border sm:mt-10">
           {faqs.map((faq) => {
             const isOpen = faq.id === openId;
             return (

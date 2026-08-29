@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { navLinks } from "@/components/layout/nav-links";
 import { buildConsultationMessage, buildWhatsAppUrl } from "@/lib/whatsapp";
 
@@ -24,22 +23,21 @@ export function SiteFooter({
 
   return (
     <footer id="contact" className="hero-gradient scroll-anchor text-canvas">
-      <div className="mx-auto px-6 py-16 sm:px-8 sm:py-20">
-        <div className="grid max-w-6xl grid-cols-1 gap-12 sm:mx-auto sm:grid-cols-[1.2fr_1fr_1fr]">
+      <div className="mx-auto px-6 py-12 sm:px-8 sm:py-14">
+        <div className="grid max-w-6xl grid-cols-1 gap-10 sm:mx-auto sm:grid-cols-[1.2fr_1fr_1fr]">
           <div className="max-w-sm">
-            <p className="font-display text-2xl font-semibold">{siteTitle}</p>
-            <p className="mt-2 text-sm text-canvas/60">{location}</p>
-            <p className="mt-6 max-w-xs text-sm leading-relaxed text-canvas/70">
-              Certified personal training and coaching, built around your body,
-              your schedule, and your goals.
-            </p>
+            <p className="font-display text-xl font-semibold">{siteTitle}</p>
+            <span className="mt-1.5 flex items-center gap-1.5 text-sm text-canvas/60">
+              <LocationIcon />
+              {location}
+            </span>
           </div>
 
           <div>
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.16em] text-canvas/50">
-              Navigate
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.16em] text-canvas/50">
+              Quick Links
             </p>
-            <nav aria-label="Footer" className="flex flex-col gap-3">
+            <nav aria-label="Footer" className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
@@ -53,19 +51,19 @@ export function SiteFooter({
           </div>
 
           <div>
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.16em] text-canvas/50">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.16em] text-canvas/50">
               Get In Touch
             </p>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
               {whatsappUrl ? (
-                <Button
+                <a
                   href={whatsappUrl}
-                  external
-                  variant="accent"
-                  className="w-full justify-center sm:w-auto"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-canvas/75 transition-colors hover:text-canvas"
                 >
-                  WhatsApp Alia
-                </Button>
+                  WhatsApp
+                </a>
               ) : null}
               {email ? (
                 <a
@@ -79,7 +77,7 @@ export function SiteFooter({
           </div>
         </div>
 
-        <div className="mx-auto mt-14 flex max-w-6xl flex-col gap-2 border-t border-canvas/10 pt-6 text-xs text-canvas/50 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto mt-10 flex max-w-6xl flex-col gap-2 border-t border-canvas/10 pt-5 text-xs text-canvas/50 sm:flex-row sm:items-center sm:justify-between">
           <p>
             &copy; {year} {siteTitle}. All rights reserved.
           </p>
@@ -87,5 +85,18 @@ export function SiteFooter({
         </div>
       </div>
     </footer>
+  );
+}
+
+function LocationIcon() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path
+        d="M8 14.5S13 10.4 13 6.5A5 5 0 0 0 3 6.5c0 3.9 5 8 5 8Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+      />
+      <circle cx="8" cy="6.5" r="1.75" stroke="currentColor" strokeWidth="1.4" />
+    </svg>
   );
 }
