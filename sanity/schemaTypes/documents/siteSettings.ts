@@ -95,7 +95,8 @@ export const siteSettings = defineType({
       name: "heroImage",
       title: "Hero Image",
       type: "image",
-      description: "Alia's main hero portrait.",
+      description:
+        "Upload a transparent PNG/WebP cutout of Alia only — no background, no design elements. The website's hero background (gradient, decorative shapes, layout) is built in code and will show through around this cutout automatically.",
       options: { hotspot: true },
       fields: [
         defineField({

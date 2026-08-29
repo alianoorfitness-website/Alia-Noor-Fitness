@@ -15,20 +15,28 @@
   --ink-muted: #57524d;
   --ink-faint: #8b8480;
 
-  /* Sophisticated muted accent: a deep terracotta/clay, premium and warm
-     without being stereotypically pink. */
-  --accent: #a8503b;
-  --accent-strong: #8a3f2d;
-  --accent-soft: #e9d9cf;
+  /* Warm peach/coral accent — the site's single accent hue, used sparingly
+     for primary CTAs, highlighted words, and small UI accents. */
+  --accent: #e08a63;
+  --accent-strong: #c96a46;
+  --accent-soft: #f6ddc9;
 
   /* Warm neutral surface for cards/panels. */
   --surface: #efe8e0;
   --surface-border: #ddd3c7;
 
-  /* Restrained warm metallic highlight, used sparingly. */
-  --highlight: #c7a05a;
+  /* Lighter peach, used for highlighted text on dark backgrounds (hero,
+     final CTA) where --accent itself wouldn't have enough contrast. */
+  --highlight: #f3ac82;
 
   --success: #4f6f52;
+
+  /* Deep blue/teal hero gradient — coded here, never baked into the
+     uploaded Sanity hero image. See .hero-gradient below and
+     components/hero/hero-section.tsx. */
+  --hero-navy: #0a2233;
+  --hero-teal: #123c4c;
+  --hero-teal-light: #1f6478;
 
   /* Glassmorphism surfaces — used selectively, not everywhere. */
   --glass-bg: rgba(255, 253, 251, 0.6);
@@ -52,7 +60,14 @@
   --color-success: var(--success);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  /*
+   * Alias rather than a separate typeface: the site now uses Inter
+   * exclusively (see app/layout.tsx), with hierarchy expressed through
+   * weight/tracking/italic instead of a second serif display font.
+   * Keeping the `--font-display` token/`font-display` utility means every
+   * existing component that reaches for it still works unchanged.
+   */
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
@@ -73,7 +88,8 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.01em;
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 
   :focus-visible {
@@ -153,6 +169,21 @@
 /* prefers-reduced-motion base rule already forces animation-duration to
    ~0 and iteration-count to 1 globally, which halts this marquee on a
    static frame — nothing additional needed here. */
+
+/*
+ * Hero background gradient — coded entirely here, never part of the
+ * uploaded Sanity hero image. Deep navy in the lower-left corner,
+ * warming toward a lighter teal in the upper-right (behind where the
+ * subject's head/shoulders sit), so the transparent cutout in
+ * hero-section.tsx reads as if it's standing inside real depth rather
+ * than pasted onto a flat color.
+ */
+.hero-gradient {
+  background-image:
+    radial-gradient(ellipse 90% 70% at 82% 8%, var(--hero-teal-light) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 60% at 100% 100%, var(--hero-teal) 0%, transparent 65%),
+    linear-gradient(160deg, var(--hero-teal) 0%, var(--hero-navy) 65%, var(--hero-navy) 100%);
+}
 
 @media (prefers-reduced-motion: reduce) {
   html {

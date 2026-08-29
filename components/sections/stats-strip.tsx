@@ -23,17 +23,19 @@ export function StatsStrip({ items }: StatsStripProps) {
   if (items.length === 0) return null;
 
   return (
-    <section className="relative bg-ink py-10 sm:py-12">
+    <section className="relative border-b border-surface-border bg-canvas-raised py-10 sm:py-12">
       <Reveal className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-6 sm:grid-cols-4 sm:gap-8 sm:px-8">
         {items.map((item, index) => (
           <div
             key={item.id}
             className={`flex flex-col gap-1 text-center sm:text-left ${
-              index > 0 ? "sm:border-l sm:border-canvas/15 sm:pl-8" : ""
+              index > 0 ? "sm:border-l sm:border-surface-border sm:pl-8" : ""
             }`}
           >
-            <span className="font-display text-3xl text-canvas sm:text-4xl">{item.value}</span>
-            <span className="text-xs uppercase tracking-[0.14em] text-canvas/65 sm:text-sm">
+            <span className="font-display text-3xl font-semibold text-accent-strong sm:text-4xl">
+              {item.value}
+            </span>
+            <span className="text-xs uppercase tracking-[0.14em] text-ink-muted sm:text-sm">
               {item.label}
             </span>
           </div>

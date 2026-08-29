@@ -1,4 +1,5 @@
 import { CoachIntroSection } from "@/components/sections/coach-intro-section";
+import { CredentialStrip } from "@/components/sections/credential-strip";
 import { ExpertiseSection } from "@/components/sections/expertise-section";
 import { FaqSection } from "@/components/sections/faq-section";
 import { FinalCtaSection } from "@/components/sections/final-cta-section";
@@ -65,7 +66,6 @@ export default async function Home() {
   const coachCredentials = (coachProfile?.credentials ?? []).map(
     mapCredentialTitle
   );
-  const coachProfileImageUrl = sanityImageUrl(coachProfile?.profileImage, 800);
 
   // Trust/metrics strip: only real, derivable values — never a fabricated
   // business claim like a client count that isn't actually stored anywhere.
@@ -114,15 +114,13 @@ export default async function Home() {
           coachName={coachProfile.name}
           introduction={coachProfile.introduction}
           coachingPhilosophy={coachProfile.coachingPhilosophy}
-          profileImageUrl={coachProfileImageUrl}
-          profileImageAlt={coachProfile.profileImage?.alt ?? coachProfile.name}
-          credentials={coachCredentials}
           associationLabel={coachProfile.currentAssociation}
           associationExperience={coachProfile.associationExperience}
           yearsExperience={coachProfile.yearsExperience}
         />
       ) : null}
 
+      <CredentialStrip items={coachCredentials} />
       <ExpertiseSection items={expertiseItems} />
       <TransformationsSection transformations={transformations} />
       <TestimonialsSection testimonials={testimonials} />

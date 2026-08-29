@@ -1,109 +1,103 @@
-import { ExpertiseIcon } from "@/components/sections/expertise-icon";
+"use client";
+
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import type { ExpertiseResult } from "@/lib/sanity/types";
-
-export interface ExpertiseGroup {
-  category: string;
-  items: ExpertiseResult[];
-}
 
 interface ExpertiseSectionProps {
   items: ExpertiseResult[];
 }
 
 /**
- * Groups flat Sanity expertise documents by their `category` field
- * (preserving first-seen category order, which follows each item's `order`
- * since the query is already sorted).
- */
-function groupByCategory(items: ExpertiseResult[]): ExpertiseGroup[] {
-  const groups: ExpertiseGroup[] = [];
-  const indexByCategory = new Map<string, number>();
-
-  for (const item of items) {
-    let groupIndex = indexByCategory.get(item.category);
-    if (groupIndex === undefined) {
-      groupIndex = groups.length;
-      indexByCategory.set(item.category, groupIndex);
-      groups.push({ category: item.category, items: [] });
-    }
-    groups[groupIndex].items.push(item);
-  }
-
-  return groups;
-}
-
-/**
- * Premium program/service card grid, grouped by category. Renders nothing
- * if there are no active expertise items in Sanity.
+ * Premium, editorial numbered list rather than a grid of oversized
+ * cards. Each row shows a number, the title, and (if present) a
+ * short description; clicking a row expands it to reveal the longer
+ * `description` field from Sanity, if one has been entered. Renders
+ * nothing if there are no active expertise items — no fabricated
+ * placeholder items.
  */
 export function ExpertiseSection({ items }: ExpertiseSectionProps) {
-  const groups = groupByCategory(items);
+  const [openId, setOpenId] = useState<string | null>(null);
 
-  if (groups.length === 0) return null;
+  if (items.length === 0) return null;
 
   return (
     <section id="expertise" className="scroll-anchor bg-surface py-20 sm:py-28 lg:py-32">
-      <div className="mx-auto max-w-6xl px-6 sm:px-8">
+      <div className="mx-auto max-w-4xl px-6 sm:px-8">
         <Reveal>
           <SectionHeading
             eyebrow="Expertise"
-            title="A coaching system, not a workout plan."
-            description="Every program below folds into one coaching relationship — movement quality, strength, and nutrition working together rather than in isolation."
+            title="What I Help You Build"
+            description="Every program folds into one coaching relationship — movement quality, strength, and nutrition working together rather than in isolation."
             className="max-w-2xl"
           />
         </Reveal>
 
-        <div className="mt-14 flex flex-col gap-14">
-          {groups.map((group, groupIndex) => (
-            <div key={group.category}>
-              <Reveal delay={groupIndex * 0.06}>
-                <h3 className="mb-6 font-display text-xl text-ink-faint sm:text-2xl">
-                  {group.category}
-                </h3>
-              </Reveal>
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {group.items.map((item, itemIndex) => (
-                  <Reveal
-                    key={item._id}
-                    delay={groupIndex * 0.06 + itemIndex * 0.05}
-                    className="h-full"
+        <div className="mt-12 flex flex-col divide-y divide-surface-border border-y border-surface-border sm:mt-16">
+          {items.map((item, index) => {
+            const isOpen = item._id === openId;
+            const hasDetail = Boolean(item.description);
+            return (
+              <Reveal key={item._id} delay={index * 0.05}>
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => hasDetail && setOpenId(isOpen ? null : item._id)}
+                    aria-expanded={hasDetail ? isOpen : undefined}
+                    aria-controls={hasDetail ? `expertise-panel-${item._id}` : undefined}
+                    className={`flex w-full items-start gap-5 py-6 text-left sm:gap-8 sm:py-8 ${
+                      hasDetail ? "cursor-pointer" : "cursor-default"
+                    }`}
                   >
-                    <div
-                      className={`group flex h-full flex-col gap-4 rounded-[1.5rem] p-6 transition-shadow duration-300 sm:p-7 ${
-                        item.featured
-                          ? "bg-ink text-canvas shadow-[0_25px_50px_-25px_rgba(28,26,25,0.45)]"
-                          : "border border-surface-border bg-canvas-raised text-ink hover:shadow-[0_20px_40px_-28px_rgba(28,26,25,0.25)]"
-                      }`}
-                    >
-                      <span
-                        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${
-                          item.featured ? "bg-canvas/15 text-highlight" : "bg-accent-soft text-accent-strong"
-                        }`}
-                      >
-                        <ExpertiseIcon iconKey={item.iconKey} />
-                      </span>
-                      <div className="flex-1">
-                        <h4 className="break-words font-display text-lg leading-snug sm:text-xl">
-                          {item.title}
-                        </h4>
-                        {item.shortDescription ? (
-                          <p
-                            className={`mt-2 break-words text-sm leading-relaxed ${
-                              item.featured ? "text-canvas/75" : "text-ink-muted"
-                            }`}
-                          >
-                            {item.shortDescription}
-                          </p>
-                        ) : null}
-                      </div>
+                    <span className="shrink-0 font-display text-2xl font-semibold text-accent sm:text-3xl">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="break-words font-display text-2xl font-semibold leading-snug text-ink sm:text-3xl">
+                        {item.title}
+                      </h3>
+                      {item.shortDescription ? (
+                        <p className="mt-2 max-w-xl break-words text-sm leading-relaxed text-ink-muted sm:text-base">
+                          {item.shortDescription}
+                        </p>
+                      ) : null}
                     </div>
-                  </Reveal>
-                ))}
-              </div>
-            </div>
-          ))}
+                    {hasDetail ? (
+                      <motion.span
+                        aria-hidden="true"
+                        animate={{ rotate: isOpen ? 45 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-surface-border text-lg text-ink"
+                      >
+                        +
+                      </motion.span>
+                    ) : null}
+                  </button>
+                  {hasDetail ? (
+                    <AnimatePresence initial={false}>
+                      {isOpen ? (
+                        <motion.div
+                          id={`expertise-panel-${item._id}`}
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <p className="max-w-xl break-words pb-6 pl-[3.25rem] text-sm leading-relaxed text-ink-muted sm:pl-[4.5rem] sm:text-base">
+                            {item.description}
+                          </p>
+                        </motion.div>
+                      ) : null}
+                    </AnimatePresence>
+                  ) : null}
+                </div>
+              </Reveal>
+            );
+          })}
         </div>
       </div>
     </section>

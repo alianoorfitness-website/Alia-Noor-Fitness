@@ -136,7 +136,7 @@ export function BeforeAfterSlider({
 
 function ArrowsIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className="h-3.5 w-3.5">
       <path
         d="M5 3 1 8l4 5M11 3l4 5-4 5"
         stroke="currentColor"

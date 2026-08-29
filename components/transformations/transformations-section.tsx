@@ -14,16 +14,19 @@ interface TransformationsSectionProps {
  * no fallback to mock data, so it hides itself entirely when there are no
  * published transformations rather than ever showing fabricated content.
  *
- * Every entry renders through the same TransformationCard at the same
- * size in a responsive horizontal grid — one card gets a comfortable
- * max-width single column, two+ fill a 2/3-column row depending on
- * viewport. There's no "featured" large-card treatment: with real,
- * mostly-portrait source photography, giving one entry a different
- * aspect ratio made the whole section inconsistent, so every card now
- * shares an identical fixed-ratio image container regardless of count.
+ * Desktop (`sm`+): a real CSS grid — 3 columns for 3+, 2 for exactly 2, a
+ * single centered column for 1.
+ *
+ * Mobile: a horizontally swipeable row (scroll-snap), not a stacked
+ * list. Each card is sized so the next one peeks in from the right edge
+ * ("Full Card] [Partial Next →"), signaling more content is available
+ * without needing every card's full height. `overflow-x-auto` is scoped
+ * to this row only — the section/page itself never overflows.
  */
 export function TransformationsSection({ transformations }: TransformationsSectionProps) {
   if (transformations.length === 0) return null;
+
+  const isSingle = transformations.length === 1;
 
   return (
     <section id="transformations" className="scroll-anchor py-20 sm:py-28 lg:py-32">
@@ -36,18 +39,26 @@ export function TransformationsSection({ transformations }: TransformationsSecti
             className="max-w-2xl"
           />
         </Reveal>
+      </div>
 
+      <div className="mt-10 sm:mt-14">
         <div
-          className={`mt-14 grid grid-cols-1 gap-8 sm:gap-10 ${
-            transformations.length === 1
-              ? "mx-auto max-w-sm"
+          className={`no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 sm:mx-auto sm:max-w-6xl sm:grid sm:snap-none sm:gap-8 sm:overflow-visible sm:px-8 sm:pb-0 ${
+            isSingle
+              ? "sm:mx-auto sm:max-w-sm"
               : transformations.length === 2
-                ? "mx-auto max-w-3xl sm:grid-cols-2"
-                : "sm:grid-cols-2 lg:grid-cols-3"
+                ? "sm:mx-auto sm:max-w-3xl sm:grid-cols-2"
+                : "sm:grid-cols-3"
           }`}
         >
           {transformations.map((transformation, index) => (
-            <Reveal key={transformation.id} delay={index * 0.08} className="h-full">
+            <Reveal
+              key={transformation.id}
+              delay={index * 0.08}
+              className={`h-full shrink-0 snap-start sm:w-auto sm:shrink ${
+                isSingle ? "w-[85%] max-w-[300px]" : "w-[78%] max-w-[280px]"
+              }`}
+            >
               <TransformationCard transformation={transformation} />
             </Reveal>
           ))}

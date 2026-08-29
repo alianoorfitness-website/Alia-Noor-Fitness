@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 
+import { HeroFloatingCard } from "@/components/hero/hero-floating-card";
 import { Button } from "@/components/ui/button";
 import { buildConsultationMessage, buildWhatsAppUrl } from "@/lib/whatsapp";
 
@@ -20,7 +21,7 @@ export interface HeroSectionProps {
   subheadline: string;
   primaryCtaLabel: string;
   secondaryCtaLabel: string;
-  /** Undefined until a hero image is uploaded in Sanity — the portrait is omitted, not broken, when absent. */
+  /** Undefined until a hero image is uploaded in Sanity — the cutout is omitted, not broken, when absent. */
   heroImageUrl?: string;
   heroImageAlt: string;
   coachName: string;
@@ -33,9 +34,50 @@ export interface HeroSectionProps {
 }
 
 /**
- * Fully CMS-driven hero. All copy, the portrait image, and CTA labels come
- * from Sanity Site Settings / Coach Profile via the page-level data layer —
- * see app/page.tsx and lib/sanity/queries.ts.
+ * Splits a headline into a "base" and "emphasis" fragment purely from its
+ * own punctuation — never from hardcoded content. Sanity's `heroHeadline`
+ * is a single plain-text field, so there's no rich-text markup to carry an
+ * accent-color instruction. Splitting on the last sentence boundary (". ")
+ * when one exists, or otherwise the last few words, lets any headline the
+ * client types get the same "final phrase in accent color" treatment the
+ * design calls for, without this component ever knowing or hardcoding
+ * what that phrase actually says.
+ */
+function splitHeadlineEmphasis(headline: string): { base: string; emphasis: string } {
+  const sentenceBreak = headline.lastIndexOf(". ");
+  if (sentenceBreak !== -1) {
+    return {
+      base: headline.slice(0, sentenceBreak + 1),
+      emphasis: headline.slice(sentenceBreak + 2),
+    };
+  }
+  const words = headline.trim().split(/\s+/);
+  if (words.length <= 3) return { base: "", emphasis: headline };
+  return {
+    base: words.slice(0, -3).join(" ") + " ",
+    emphasis: words.slice(-3).join(" "),
+  };
+}
+
+/**
+ * Fully CMS-driven hero. All copy and CTA labels come from Sanity Site
+ * Settings; the coach cutout image comes from Sanity Site Settings'
+ * `heroImage` field, which is expected to contain ONLY a transparent
+ * PNG/WebP portrait cutout — never a pre-composed background.
+ *
+ * Layering (see the JSX comments below for exactly where each lives):
+ *   1. Coded deep blue/teal gradient — `.hero-gradient` in globals.css.
+ *      This is the section's own CSS background, so it always paints
+ *      behind every child with zero extra markup or z-index.
+ *   2. The transparent Sanity cutout — positioned absolutely, `z-0`.
+ *   3. Hero text/CTAs — normal flow content, implicitly above the
+ *      absolutely-positioned image because it comes later in the DOM.
+ *   4. Floating info cards — `z-20`, explicitly above the cutout.
+ *
+ * If the client replaces the cutout with a different transparent image
+ * (or removes it entirely), the gradient, layout, and floating cards are
+ * untouched — nothing about the hero's visual identity lives in Sanity
+ * except that one image.
  */
 export function HeroSection({
   headline,
@@ -52,151 +94,185 @@ export function HeroSection({
   trustBadges,
 }: HeroSectionProps) {
   const whatsappUrl = buildWhatsAppUrl(whatsappNumber, buildConsultationMessage());
+  const { base, emphasis } = splitHeadlineEmphasis(headline);
 
   return (
     <section
       id="top"
-      className="scroll-anchor relative overflow-hidden pt-28 pb-16 sm:pt-36 sm:pb-24 lg:pb-28"
+      className="hero-gradient scroll-anchor relative overflow-hidden pt-32 pb-14 text-canvas sm:pt-40 sm:pb-20 lg:min-h-[92vh] lg:pb-24"
     >
-      {/* Subtle background texture — grain + soft radial glow, kept quiet
-          so it never competes with the portrait or copy. */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,_var(--color-accent-soft)_0%,_transparent_55%)] opacity-70"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 opacity-[0.05] mix-blend-multiply"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-        }}
-      />
+      {/* Layer 2: transparent Sanity cutout. Absolutely positioned so it
+          can bleed toward the edge of the viewport rather than sitting in
+          a bounded card, and so text/floating cards can layer on top of
+          it without pushing layout around. `object-contain` + `object-
+          bottom` keeps the whole cutout visible and grounded at the base
+          of the hero regardless of the uploaded image's own aspect ratio. */}
+      {heroImageUrl ? (
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-0 mx-auto h-[62vh] w-full max-w-md sm:h-[72vh] sm:max-w-lg lg:inset-x-auto lg:right-[2%] lg:h-[88%] lg:w-[46%] lg:max-w-none xl:right-[4%] xl:w-[40%]"
+        >
+          <Image
+            src={heroImageUrl}
+            alt={heroImageAlt}
+            fill
+            priority
+            sizes="(min-width: 1024px) 42vw, 90vw"
+            className="object-contain object-bottom"
+          />
+        </motion.div>
+      ) : null}
 
-      <div
-        className={`mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 sm:px-8 lg:gap-10 ${
-          heroImageUrl ? "lg:grid-cols-[1.08fr_0.92fr]" : "max-w-4xl"
-        }`}
-      >
-        <div className="order-2 flex flex-col gap-6 lg:order-1">
-          <motion.span
-            custom={0}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
-            className="inline-flex max-w-full flex-wrap items-center gap-2 rounded-full border border-surface-border bg-canvas-raised px-4 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-ink-muted"
-          >
-            <span className="break-words">
-              {profession} &middot; {location}
-            </span>
-          </motion.span>
-
-          <motion.h1
-            custom={1}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
-            className="text-balance break-words font-display text-5xl leading-[1.03] text-ink sm:text-6xl md:text-7xl"
-          >
-            {headline}
-          </motion.h1>
-
-          <motion.p
-            custom={2}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
-            className="max-w-lg text-balance text-base leading-relaxed text-ink-muted sm:text-lg"
-          >
-            {subheadline}
-          </motion.p>
-
-          <motion.div
-            custom={3}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
-            className="flex flex-wrap items-center gap-3 pt-2 sm:gap-4"
-          >
-            <Button href={whatsappUrl} external className="px-7 py-3.5 text-[15px]">
-              {primaryCtaLabel}
-            </Button>
-            <Button href="#coaching" variant="secondary" className="px-7 py-3.5 text-[15px]">
-              {secondaryCtaLabel}
-            </Button>
-          </motion.div>
-
-          {(yearsExperience > 0 && !heroImageUrl) || trustBadges.length > 0 ? (
+      <div className="relative z-10 mx-auto max-w-6xl px-6 sm:px-8">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
+          {/* Layer 3: hero copy + CTAs — normal flow, so it's naturally
+              above the absolutely-positioned image layer. */}
+          <div className="flex flex-col gap-6">
             <motion.div
-              custom={4}
+              custom={0}
               initial="hidden"
               animate="visible"
               variants={fadeUp}
-              className="flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-surface-border pt-6"
+              className="flex flex-wrap items-center gap-2"
             >
-              {yearsExperience > 0 && !heroImageUrl ? (
-                <div className="flex items-center gap-3">
-                  <span className="font-display text-3xl text-ink">{yearsExperience}+</span>
-                  <span className="text-sm leading-tight text-ink-muted">
-                    Years of coaching
-                    <br />
-                    experience
-                  </span>
-                </div>
-              ) : null}
-              {trustBadges.slice(0, 3).map((badge) => (
-                <div key={badge} className="flex items-center gap-2">
-                  <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                  <span className="max-w-[10rem] break-words text-sm leading-tight text-ink-muted">
-                    {badge}
-                  </span>
-                </div>
-              ))}
+              <span className="rounded-full border border-canvas/25 bg-canvas/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-canvas/90 backdrop-blur-sm">
+                {profession}
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-canvas/25 bg-canvas/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-canvas/90 backdrop-blur-sm">
+                <LocationIcon />
+                {location}
+              </span>
             </motion.div>
+
+            <motion.h1
+              custom={1}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              className="text-balance break-words text-5xl font-semibold leading-[1.04] tracking-tight sm:text-6xl md:text-7xl"
+            >
+              {base}
+              <span className="text-highlight">{emphasis}</span>
+            </motion.h1>
+
+            <motion.p
+              custom={2}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              className="max-w-lg text-balance text-base leading-relaxed text-canvas/80 sm:text-lg"
+            >
+              {subheadline}
+            </motion.p>
+
+            <motion.div
+              custom={3}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              className="flex flex-wrap items-center gap-3 pt-2 sm:gap-4"
+            >
+              <Button href={whatsappUrl} external variant="accent" className="px-7 py-3.5 text-[15px]">
+                {primaryCtaLabel}
+              </Button>
+              <Button
+                href="#coaching"
+                variant="accent-outline"
+                className="px-7 py-3.5 text-[15px]"
+              >
+                {secondaryCtaLabel}
+              </Button>
+            </motion.div>
+
+            {trustBadges.length > 0 ? (
+              <motion.div
+                custom={4}
+                initial="hidden"
+                animate="visible"
+                variants={fadeUp}
+                className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-canvas/15 pt-6"
+              >
+                {trustBadges.slice(0, 3).map((badge) => (
+                  <div key={badge} className="flex items-center gap-2">
+                    <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-highlight" />
+                    <span className="max-w-[11rem] break-words text-sm leading-tight text-canvas/75">
+                      {badge}
+                    </span>
+                  </div>
+                ))}
+              </motion.div>
+            ) : null}
+          </div>
+
+          {/* Right column: reserves the visual space the absolutely
+              positioned cutout occupies on desktop, and anchors the
+              floating cards (Layer 4) relative to it. Empty on mobile —
+              the cutout there is centered/full-width behind the copy
+              above rather than beside it. */}
+          <div className="relative hidden lg:block" aria-hidden="true" />
+        </div>
+      </div>
+
+      {/* Layer 4: floating info cards, explicitly z-20 so they always sit
+          above the cutout image regardless of DOM position. Positioned
+          relative to the viewport-width hero container so they read as
+          "around" the subject rather than inside a card with her. */}
+      <div className="pointer-events-none relative z-20 mx-auto mt-8 max-w-6xl px-6 sm:mt-0 sm:px-8">
+        <div className="flex flex-col gap-4 sm:absolute sm:right-8 sm:top-4 sm:w-72 lg:right-8 lg:top-12 lg:w-72">
+          <div className="pointer-events-auto">
+            <HeroFloatingCard delay={0.5}>
+              <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink-muted">
+                Coaching That
+              </p>
+              <p className="mt-1.5 font-display text-lg font-semibold leading-snug text-ink">
+                Fits Your Life. Your Goals.{" "}
+                <span className="text-accent-strong">Your Pace.</span>
+              </p>
+            </HeroFloatingCard>
+          </div>
+
+          {yearsExperience > 0 ? (
+            <div className="pointer-events-auto self-start">
+              <HeroFloatingCard delay={0.65} className="bg-ink/85 text-canvas">
+                <div className="flex items-center gap-3">
+                  <span className="font-display text-3xl font-semibold text-highlight">
+                    {yearsExperience}+
+                  </span>
+                  <span className="text-xs leading-tight text-canvas/80">
+                    Years
+                    <br />
+                    Personal Training
+                    <br />
+                    Experience
+                  </span>
+                </div>
+              </HeroFloatingCard>
+            </div>
           ) : null}
         </div>
-
-        {heroImageUrl ? (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="relative order-1 lg:order-2"
-          >
-            <div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-[2.5rem] bg-surface shadow-[0_40px_80px_-40px_rgba(28,26,25,0.35)] sm:max-w-md lg:max-w-none">
-              <Image
-                src={heroImageUrl}
-                alt={heroImageAlt}
-                fill
-                priority
-                sizes="(min-width: 1024px) 42vw, (min-width: 640px) 60vw, 90vw"
-                className="object-cover"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent"
-              />
-              <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-3 sm:bottom-6 sm:left-6 sm:right-6">
-                <div className="min-w-0">
-                  <p className="truncate font-display text-xl text-canvas">{coachName}</p>
-                  <p className="truncate text-xs uppercase tracking-[0.14em] text-canvas/75">
-                    {profession}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Overlapping accent card — a deliberate editorial detail so
-                the portrait doesn't sit in a plain, isolated box. */}
-            {yearsExperience > 0 ? (
-              <div className="glass-panel absolute -left-4 -top-4 hidden flex-col rounded-2xl px-5 py-4 sm:-left-6 sm:-top-6 sm:flex">
-                <span className="font-display text-2xl text-ink">{yearsExperience}+</span>
-                <span className="text-xs leading-tight text-ink-muted">Years coaching</span>
-              </div>
-            ) : null}
-          </motion.div>
-        ) : null}
       </div>
+
+      {/* Screen-reader-only fallback so the coach's name/role is
+          announced even when the cutout image can't render (still
+          resolves to a normal <img alt> once the image loads). */}
+      <span className="sr-only">
+        {coachName}, {profession}
+      </span>
     </section>
+  );
+}
+
+function LocationIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path
+        d="M8 14.5S13 10.4 13 6.5A5 5 0 0 0 3 6.5c0 3.9 5 8 5 8Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+      />
+      <circle cx="8" cy="6.5" r="1.75" stroke="currentColor" strokeWidth="1.4" />
+    </svg>
   );
 }

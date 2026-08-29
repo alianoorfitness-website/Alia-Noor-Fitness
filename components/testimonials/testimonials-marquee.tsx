@@ -12,7 +12,7 @@ interface TestimonialsMarqueeProps {
 const SECONDS_PER_ITEM = 7;
 const MIN_DURATION_SECONDS = 24;
 
-const CARD_WIDTH_CLASSES = "w-[280px] shrink-0 sm:w-[340px] md:w-[380px]";
+const CARD_WIDTH_CLASSES = "w-[260px] shrink-0 sm:w-[340px] md:w-[380px]";
 
 /**
  * Continuously scrolling, seamless horizontal testimonial loop. Purely
@@ -41,7 +41,7 @@ export function TestimonialsMarquee({ testimonials }: TestimonialsMarqueeProps) 
       aria-label="Client testimonials"
     >
       <div
-        className="testimonial-marquee-track flex w-max gap-6 py-2"
+        className="testimonial-marquee-track flex w-max gap-4 py-2 sm:gap-6"
         style={{ "--marquee-duration": `${duration}s` } as React.CSSProperties}
       >
         {testimonials.map((testimonial) => (
